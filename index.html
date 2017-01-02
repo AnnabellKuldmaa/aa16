@@ -18,13 +18,14 @@
     }
     
     /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 650px;}
+    .row.content {height: 100%;}
     
     /* Set gray background color and 100% height */
     .sidenav {
       padding-top: 20px;
-      background-color: #f1f1f1;
+      background-color: white;
       height: 100%;
+      position: fixed; /* Stay in place */
     }
     
     /* Set black background color, white text and some padding */
@@ -36,6 +37,9 @@
 
 body {
     margin-bottom: 60px
+}
+#view{
+  margin: 50px;
 }
 .footer {
   background-color: #555;
@@ -54,6 +58,27 @@ body {
       }
       .row.content {height:auto;} 
     }
+    .line1 {
+  fill: none;
+  stroke: blue;
+  stroke-width: 1.5px;
+}
+ .line {
+  fill: none;
+  stroke-width: 1.5px;
+}
+.line2 {
+  fill: none;
+  stroke: green;
+  stroke-width: 1.5px;
+}
+.line1_dot {
+  fill: blue;
+}
+.line2_dot {
+  fill: green;
+}
+
   </style>
 </head>
 <body>
@@ -77,28 +102,47 @@ body {
   </div>
 </nav>
   
-<div class="container-fluid text-center">    
+<div class="container-fluid text-center">   
+
   <div class="row content">
-    <div class="col-sm-2 sidenav">
-      <p><form>
-<button type="button" class="btn btn-success" id="generate">Generate data</button>
-</form></p>
-      
+    
+    <div class="col-sm-12"> 
+      <h1>Dynamic Time Warping</h1>
+      <p>Siia tuleb sissejuhatav kirjeldus</p>
+      <hr>
     </div>
 
-    <div class="col-sm-10 text-left"> 
-      <h1>Welcome</h1>
-      <p>Siia tuleb kirjeldus</p>
-      <hr>
-      
-    </div>
+    <div>
+    <p>
+<button type="button" class="btn btn-default" id="generate">Generate data</button>
+</p>  </div>
+   
+   
+   <div class="col-sm-10" id="view"> 
+   </div>
+
     
   </div>
 </div>
 
 <footer class="footer text-center">
-  <p>Footer Text</p>
+  <p>&copy; 2017 Annabell Kuldmaa & Liis Kolberg | Project in course "Advanced Algorithmics"</p>
+  <p>University of Tartu</p>
 </footer>
+<script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
+<script type="text/javascript" src="warping-vis.js"></script>
+<script>
+$('#generate').on('click', function (e) {
+  document.getElementById("view").innerHTML = "";
+  var n = Math.floor((Math.random() * 20) + 3);
+  var m = Math.floor((Math.random() * 20) + 3);
+  d3.warping.matrix(n, m); 
+})
+</script>
+
+<script type="text/javascript">
+d3.warping.matrix(10,12);
+</script>
 
 </body>
 </html>
