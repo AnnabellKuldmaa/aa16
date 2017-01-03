@@ -48,13 +48,7 @@ if (!d3) {
         return {"d1": d1, "d2": d2};
     };
 
-    // generate matrix with zeros
-    zero2D = function (rows, cols) {
-        var array = [], row = [];
-        while (cols--) row.push(0);
-        while (rows--) array.push(row.slice());
-        return array;
-    };
+    
     // Distance/cost matrix (n is y-axis and m is x-axis)
     d3.warping.matrix = function (n, m) {
         // Define the div for the tooltip
@@ -263,15 +257,20 @@ if (!d3) {
         // .call(xAxis);
         var line2 = matrix.append("g")
             .attr("class", "linechart");
-        line2
-            .append("path")
+        var path = line2.append("path")
             .attr("class", "line2")
             .attr("d", valueline2(d2));
+
         line2.selectAll("dot")
             .data(d2)
             .enter().append("circle")
-            .attr("r", 2)
+
+            //.duration(function (d, i) {
+            //    return 2000 * i;
+            //})
+            .attr("r", 0)
             .attr("class", "line2_dot")
+            .style("fill", "#000")
             .attr("cy", function (d, i) {
                 return x2(i);
             })
@@ -283,15 +282,37 @@ if (!d3) {
                     .duration(200)
                     .style("opacity", .9);
                 div.html("Value: " + d)
-                    .style("left", (d3.event.pageX-68) + "px")
-                    .style("top", (d3.event.pageY-10) + "px");
+                    .style("left", (d3.event.pageX - 68) + "px")
+                    .style("top", (d3.event.pageY - 10) + "px");
             })
             .on('mouseout', function () {
                 div.transition()
                     .duration(500)
                     .style("opacity", 0);
             });
+        line2.selectAll("circle")
+            .transition()
+            .delay(function(d,i){
+                return 80*i;
+            })
+            .ease("linear")
+            .attr("r", 2)
+            .style("fill", "green")
+            .attr("cy", function (d, i) {
+                return x2(i);
+            })
+            .attr("cx", function (d) {
+                return y2(d);
+            });
 
+        var totalLength = path.node().getTotalLength();
+        path
+            .attr("stroke-dasharray", totalLength + " " + totalLength)
+            .attr("stroke-dashoffset", totalLength)
+            .transition()
+            .duration(2000)
+            .ease("linear")
+            .attr("stroke-dashoffset", 0);
 
         line2.attr("transform", "translate(" + 45 + "," + (100 + box_w / 2) + ")");
 
