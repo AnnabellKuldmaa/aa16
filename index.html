@@ -6,142 +6,171 @@
     <meta charset="utf-8" content="application/xhtml+xml" http-equiv="Content-Type"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<title>Dynamic Time Warping</title>
-<style>
-    /* Remove the navbar's default margin-bottom and rounded borders */ 
-    .navbar {
-      margin-bottom: 0;
-      border-radius: 0;
-    }
-    
-    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
-    .row.content {height: 100%;}
-    
-    /* Set gray background color and 100% height */
-    .sidenav {
-      padding-top: 20px;
-      background-color: white;
-      height: 100%;
-      position: fixed; /* Stay in place */
-    }
-    
-    /* Set black background color, white text and some padding */
-    
-    html {
-    position: relative;
-    min-height: 100%
-}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <title>Dynamic Time Warping</title>
+    <style>
+        /* Remove the navbar's default margin-bottom and rounded borders */
+        .navbar {
+            margin-bottom: 0;
+            border-radius: 0;
+        }
 
-body {
-    margin-bottom: 60px
-}
-#view{
-  margin: 50px;
-}
-.footer {
-  background-color: #555;
-      color: white;
-    padding: 15px;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    min-height: 60px;
-}
-    /* On small screens, set height to 'auto' for sidenav and grid */
-    @media screen and (max-width: 767px) {
-      .sidenav {
-        height: auto;
-        padding: 15px;
-      }
-      .row.content {height:auto;} 
-    }
-    .line1 {
-  fill: none;
-  stroke: blue;
-  stroke-width: 1.5px;
-}
- .line {
-  fill: none;
-  stroke-width: 1.5px;
-}
-.line2 {
-  fill: none;
-  stroke: green;
-  stroke-width: 1.5px;
-}
-.line1_dot {
-  fill: blue;
-}
-.line2_dot {
-  fill: green;
-}
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {
+            height: 100%;
+        }
 
-  </style>
+        /* Set gray background color and 100% height */
+        .sidenav {
+            padding-top: 20px;
+            background-color: white;
+            height: 100%;
+            position: fixed; /* Stay in place */
+        }
+
+        /* Set black background color, white text and some padding */
+
+        html {
+            position: relative;
+            min-height: 100%
+        }
+
+        body {
+            margin-bottom: 60px
+        }
+
+        #view {
+            margin: 50px;
+        }
+
+        div.tooltip {
+            position: absolute;
+            text-align: center;
+            width: 60px;
+            height: 18px;
+            padding: 2px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            min-height: 60px;
+        }
+
+        /* On small screens, set height to 'auto' for sidenav and grid */
+        @media screen and (max-width: 767px) {
+            .sidenav {
+                height: auto;
+                padding: 15px;
+            }
+
+            .row.content {
+                height: auto;
+            }
+        }
+
+        .line1 {
+            fill: none;
+            stroke: blue;
+            stroke-width: 1.5px;
+        }
+
+        .line {
+            fill: none;
+            stroke-width: 1.5px;
+        }
+
+        .line2 {
+            fill: none;
+            stroke: green;
+            stroke-width: 1.5px;
+        }
+
+        .line1_dot {
+            fill: blue;
+        }
+
+        .line2_dot {
+            fill: green;
+        }
+
+    </style>
 </head>
 <body>
 <nav class="navbar navbar-inverse">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>                        
-      </button>
-     
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </div>
     </div>
-    <div class="collapse navbar-collapse" id="myNavbar">
-      <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </div>
-  </div>
 </nav>
-  
-<div class="container-fluid text-center">   
 
-  <div class="row content">
-    
-    <div class="col-sm-12"> 
-      <h1>Dynamic Time Warping</h1>
-      <p>Siia tuleb sissejuhatav kirjeldus</p>
-      <hr>
+<div class="container-fluid text-center">
+
+    <div class="row content">
+
+        <div class="col-sm-12">
+            <h1>Dynamic Time Warping</h1>
+
+            <p>Siia tuleb sissejuhatav kirjeldus</p>
+            <hr>
+        </div>
+
+        <div>
+            <p>
+                <button type="button" class="btn btn-default" id="generate">Generate data</button>
+            </p>
+        </div>
+
+
+        <div class="col-sm-10" id="view">
+        </div>
+
+
     </div>
-
-    <div>
-    <p>
-<button type="button" class="btn btn-default" id="generate">Generate data</button>
-</p>  </div>
-   
-   
-   <div class="col-sm-10" id="view"> 
-   </div>
-
-    
-  </div>
 </div>
 
 <footer class="footer text-center">
-  <p>&copy; 2017 Annabell Kuldmaa & Liis Kolberg | Project in course "Advanced Algorithmics"</p>
-  <p>University of Tartu</p>
+    <p>&copy; 2017 Annabell Kuldmaa & Liis Kolberg | Project in course "Advanced Algorithmics"</p>
+
+    <p>University of Tartu</p>
 </footer>
 <script type="text/javascript" src="http://d3js.org/d3.v3.min.js"></script>
 <script type="text/javascript" src="warping-vis.js"></script>
 <script>
-$('#generate').on('click', function (e) {
-  document.getElementById("view").innerHTML = "";
-  var n = Math.floor((Math.random() * 20) + 3);
-  var m = Math.floor((Math.random() * 20) + 3);
-  d3.warping.matrix(n, m); 
-})
+    $('#generate').on('click', function (e) {
+        document.getElementById("view").innerHTML = "";
+        var n = Math.floor((Math.random() * 20) + 3);
+        var m = Math.floor((Math.random() * 20) + 3);
+        d3.warping.matrix(n, m);
+    })
 </script>
 
 <script type="text/javascript">
-d3.warping.matrix(10,12);
+    d3.warping.matrix(10, 12);
 </script>
 
 </body>
