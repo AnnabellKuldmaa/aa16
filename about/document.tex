@@ -1,0 +1,67 @@
+
+\documentclass{article}
+
+
+%-------Packages---------
+\usepackage{amssymb,amsfonts,amsthm}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{parskip} %no indentation
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
+
+
+%------Commands---------
+
+\date{\today}
+
+\begin{document}
+	%TODO: citations: https://kar.kent.ac.uk/43498/1/HFAA%20paper%20-%20Tsinaslanidis%20etal.pdf
+	\subsection*{Introduction}
+	The task of the Dynamic Time Warping (DTW) algorithm is to measure the similarity between two sequences. DTW algorithm was introduced in \cite{Sakoe:1990:DPA:108235.108244} for speech recognition and since then has been applied to different problems in various fields such as bioinformatics \cite{journals/bioinformatics/AachC01}, entertainment \cite{Zhu:2003:WIE:872757.872780}, finance, medicine and engineering. The algorithm is is one of the most important dynamic programming algorithms and it is crucial to understand its steps.
+	
+	\subsection*{Algorithm}
+	
+	DTW algorithm calculates an optimal match between two sequences having time complexity $O(n^2)$. The original version of the algorithm uses Euclidean distance, but other metrics can be applied. In particular, most important of other metrics are Manhattan, Canberra and Minkowski distances. The algorithm for calculating DTW distance between given two sequences A and B is presented as Figure \ref{algo}. 
+	
+	\begin{algorithm}
+		\caption{Dynamic Time Warping Algorithm}\label{algo}
+		\begin{algorithmic}[1]
+			\Function{DynamicTimeWarping}{A,B}
+			\State $m \gets A.length$
+			\State $n \gets B.length$
+			\State $D \gets m \times n \text{ matrix of } 0\text{'s}$
+			\For {$i \in \{1, \ldots, m-1\}$} 
+			\State $D[i][0] \gets distance(A[i], B[0])$
+			\EndFor		
+			\For {$j \in \{1, \ldots, n-1\}$} 
+			\State $D[0][j] \gets distance(A[0], B[j])$
+			\EndFor
+			\For {$i \in \{1, \ldots, m-1\}$} 
+				\For {$j \in \{1, \ldots, n-1\}$} 
+				\State $d \gets distance(A[i], B[j])$
+				\State $D[i][j] \gets d + \min\{D[i-1][j-1], D[i-1][j], D[i][j-1]\}$
+			\EndFor
+			\EndFor
+			\Return $D[m-1][n-1]$
+			\EndFunction
+		\end{algorithmic}
+		\end{algorithm}
+	%TODO: warping path and figure
+		Given a distance matrix, a warping path is found. Warping path is a ...
+		\subsection*{Applications}
+	Recall that DTW was introduced to compare different
+	speech patterns in automatic speech recognition \cite{Sakoe:1990:DPA:108235.108244}. In other disciplines such as
+	data mining and information retrieval, DTW has been successfully applied
+	to automatically cope with time deformations and different speeds associated
+	with time-dependent data. 
+	
+\bibliography{biblio} 
+\bibliographystyle{alpha}
+\end{document}
