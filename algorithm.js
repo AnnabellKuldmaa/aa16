@@ -6,7 +6,7 @@
 // 3 - Minkowski distance with p = 3
 // window
 // 0 - whole plane
-// 1 - Sakoe Chiba Band
+// 1 - Sakoe Shiba Band
 // 2 - Itakura parallelogram
 // window_param - size of window
 
