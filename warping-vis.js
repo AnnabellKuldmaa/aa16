@@ -48,7 +48,7 @@ if (!d3) {
         return {"d1": d1, "d2": d2};
     };
 
-    
+
     // Distance/cost matrix (n is y-axis and m is x-axis)
     d3.warping.matrix = function (n, m) {
         // Define the div for the tooltip
@@ -222,15 +222,17 @@ if (!d3) {
 
         var line1 = matrix.append("g")
             .attr("class", "linechart");
-        line1
-            .append("path")
+
+        var path1 = line1.append("path")
             .attr("class", "line1")
             .attr("d", valueline1(d1));
+
         line1.selectAll("dot")
             .data(d1)
             .enter().append("circle")
-            .attr("r", 2)
+            .attr("r", 0)
             .attr("class", "line1_dot")
+            .style("fill", "#000")
             .attr("cx", function (d, i) {
                 return x(i);
             })
@@ -251,13 +253,20 @@ if (!d3) {
                     .style("opacity", 0);
             });
 
+        var totalLength = path1.node().getTotalLength();
+        path1
+            .attr("stroke-dasharray", totalLength + " " + totalLength)
+            .attr("stroke-dashoffset", totalLength)
+            .transition()
+            .duration(3000)
+            .ease("linear")
+            .attr("stroke-dashoffset", 0);
+
         line1.attr("transform", "translate(" + (100 + box_w / 2) + "," + 45 + ")");
-        //line1.append("g")
-        // .attr("class", "x axis")
-        // .call(xAxis);
+
         var line2 = matrix.append("g")
             .attr("class", "linechart");
-        var path = line2.append("path")
+        var path2 = line2.append("path")
             .attr("class", "line2")
             .attr("d", valueline2(d2));
 
@@ -290,13 +299,29 @@ if (!d3) {
                     .duration(500)
                     .style("opacity", 0);
             });
-        line2.selectAll("circle")
+
+        line1.selectAll("circle.line1_dot")
             .transition()
-            .delay(function(d,i){
-                return 80*i;
+            .delay(function (d, i) {
+                return 3000/(d1.length) * i;
             })
             .ease("linear")
-            .attr("r", 2)
+            .attr("r", 2.5)
+            .style("fill", "blue")
+            .attr("cx", function (d, i) {
+                return x(i);
+            })
+            .attr("cy", function (d) {
+                return y(d);
+            });
+
+        line2.selectAll("circle.line2_dot")
+            .transition()
+            .delay(function (d, i) {
+                return 3000/(d2.length) * i;
+            })
+            .ease("linear")
+            .attr("r", 2.5)
             .style("fill", "green")
             .attr("cy", function (d, i) {
                 return x2(i);
@@ -305,23 +330,26 @@ if (!d3) {
                 return y2(d);
             });
 
-        var totalLength = path.node().getTotalLength();
-        path
+        var totalLength = path2.node().getTotalLength();
+
+        path2
             .attr("stroke-dasharray", totalLength + " " + totalLength)
             .attr("stroke-dashoffset", totalLength)
             .transition()
-            .duration(2000)
+            .duration(3000)
             .ease("linear")
             .attr("stroke-dashoffset", 0);
 
         line2.attr("transform", "translate(" + 45 + "," + (100 + box_w / 2) + ")");
 
+        // Create the alignment line charts
         function subtractArrays(ar1, ar2) {
             var ar3 = [];
             for (var i in ar1)
                 ar3.push(Math.abs(ar1[i] - ar2[i]));
             return ar3;
         }
+
 
         var min_distance = Math.min(subtractArrays(d1, d2));
         var sep = min_distance < 30 ? 50 : 20;
@@ -336,7 +364,7 @@ if (!d3) {
             return c.id;
         }));
 
-        // Create the line charts
+
         var alignment = chart.append("g")
             .attr("class", "linedata")
             .attr("transform", "translate(0," + (100 + box_w / 2) + ")")

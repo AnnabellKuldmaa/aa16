@@ -7,8 +7,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.6.0/css/bootstrap-slider.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.6.0/css/bootstrap-slider.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.6.0/bootstrap-slider.min.js"></script>
+
     <title>Dynamic Time Warping</title>
     <style>
         /* Remove the navbar's default margin-bottom and rounded borders */
@@ -105,6 +111,11 @@
             fill: green;
         }
 
+        legend {
+            text-align: left !important;
+        }
+
+
     </style>
 </head>
 <body>
@@ -139,10 +150,96 @@
                 <hr>
             </div>
 
-            <div>
-                <p>
-                    <button type="button" class="btn btn-default" id="generate">Generate data</button>
-                </p>
+            <div class="col-sm-12" id="select_parameters">
+
+                <form class="well" style="font-size:80%;">
+                    <fieldset>
+                        <legend><h4>Select parameters</h4></legend>
+
+                        <div class="form-group form-group-sm row text-left">
+                            <label for="dist" class="col-sm-3">Distance measure:</label>
+
+                            <div class="col-sm-8">
+                                <select class="form-control input-sm" id="dist" style="width:50%;">
+                                    <option value="abs" selected>Absolute difference</option>
+                                    <option value="eucl">Euclidean distance</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group form-group-sm row text-left">
+                            <label class="col-sm-3">Window parameter:</label>
+
+                            <div class="col-sm-5">
+                                <span style="position:absolute; color:grey;">
+                                    <span id="myValue3"></span>
+                                </span>
+                                <input style="width:50%;" type="range" id="myRange3"
+                                       name="myRange3" min="3" max="100" value="10"></div>
+
+                        </div>
+
+                    </fieldset>
+                    <br>
+                    <fieldset>
+                        <legend><h4>Generate random sequences</h4></legend>
+                        <div class="form-group  form-group-sm row text-left">
+                            <label class="col-sm-3">Length for random sequences:</label>
+
+                            <div class="col-sm-4">
+                                <span style="position:absolute; color:grey;">
+                                    <span id="myValue"></span>
+                                </span>
+                                <input type="range" id="myRange"
+                                       name="myRange" min="3" max="200" value="10" step="1">
+                            </div>
+                            <div class="col-sm-4">
+                                <span style="position:absolute; color:grey;">
+                                    <span id="myValue2"></span>
+                                </span>
+
+                                <input type="range" id="myRange2"
+                                       name="myRange2" min="3" max="200" value="10" step="1">
+                            </div>
+                        </div>
+                        <!-- <div class="row text-left">
+                             <div class="col-sm-3"></div>
+                             <div class="col-sm-3">
+                                 <button type="button" class="btn btn-default" id="generate"
+                                         style="padding:5px; margin-top:10px;">Generate data
+                                 </button>
+                             </div>
+                         </div>-->
+                    </fieldset>
+                    <br>
+
+                    <fieldset>
+                        <legend><h4>Insert your own sequences</h4></legend>
+
+                        <div class="form-group form-group-sm row">
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-sm" id="data_m"
+                                       placeholder="Insert sequence 1 (separated by comma)"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group form-group-sm row">
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control input-sm" id="data_n"
+                                       placeholder="Insert sequence 2 (separated by comma)"/>
+                            </div>
+                        </div>
+                        <div class="form-group form-group-sm row">
+                            <div class="col-sm-3 text-left">
+                                <button type="button" class="btn btn-primary" onclick="startDTW();" id="start">Start
+                                </button>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                </form>
+
             </div>
 
 
@@ -178,11 +275,54 @@
         var n = Math.floor((Math.random() * 20) + 3);
         var m = Math.floor((Math.random() * 20) + 3);
         d3.warping.matrix(n, m);
-    })
+    });
 </script>
+<script type="text/javascript" charset="utf-8">
+    var myRange = document.querySelector('#myRange');
+    var myValue = document.querySelector('#myValue');
+    var off = myRange.offsetWidth / (parseInt(myRange.max) - parseInt(myRange.min));
+    var px = ((myRange.valueAsNumber - parseInt(myRange.min)) * off) - (myValue.offsetParent.offsetWidth / 2);
 
-<script type="text/javascript">
-    d3.warping.matrix(10, 12);
+    myValue.parentElement.style.left = px + 'px';
+    myValue.parentElement.style.top = myRange.offsetHeight + 'px';
+    myValue.innerHTML = "n=" + myRange.value;
+
+    myRange.oninput = function () {
+        let px = ((myRange.valueAsNumber - parseInt(myRange.min)) * off) - (myValue.offsetWidth / 2);
+        myValue.innerHTML = "n=" + myRange.value;
+        myValue.parentElement.style.left = px + 'px';
+    };
+
+
+    var myRange2 = document.querySelector('#myRange2');
+    var myValue2 = document.querySelector('#myValue2');
+    var off2 = myRange2.offsetWidth / (parseInt(myRange2.max) - parseInt(myRange2.min));
+    var px2 = ((myRange2.valueAsNumber - parseInt(myRange2.min)) * off2) - (myValue2.offsetParent.offsetWidth / 2);
+
+    myValue2.parentElement.style.left = px2 + 'px';
+    myValue2.parentElement.style.top = myRange2.offsetHeight + 'px';
+    myValue2.innerHTML = "m=" + myRange2.value;
+
+    myRange2.oninput = function () {
+        let px2 = ((myRange2.valueAsNumber - parseInt(myRange2.min)) * off2) - (myValue2.offsetWidth / 2);
+        myValue2.innerHTML = "m=" + myRange2.value;
+        myValue2.parentElement.style.left = px2 + 'px';
+    };
+
+    var myRange3 = document.querySelector('#myRange3');
+    var myValue3 = document.querySelector('#myValue3');
+    var off3 = myRange3.offsetWidth / (parseInt(myRange3.max) - parseInt(myRange3.min));
+    var px3 = ((myRange3.valueAsNumber - parseInt(myRange3.min)) * off3) - (myValue3.offsetParent.offsetWidth / 2);
+
+    myValue3.parentElement.style.left = px3 + 'px';
+    myValue3.parentElement.style.top = myRange3.offsetHeight + 'px';
+    myValue3.innerHTML = "w=" + myRange3.value;
+
+    myRange3.oninput = function () {
+        let px3 = ((myRange3.valueAsNumber - parseInt(myRange3.min)) * off3) - (myValue3.offsetWidth / 2);
+        myValue3.innerHTML = "w=" + myRange3.value;
+        myValue3.parentElement.style.left = px3 + 'px';
+    };
 </script>
 <script type="text/javascript">
     $('#myNavbar a').click(function (e) {
@@ -190,6 +330,42 @@
         $(this).tab('show')
     })
 </script>
+
+<script type="text/javascript">
+    function startDTW() {
+        document.getElementById("view").innerHTML = ""; // empty the view
+        // read the form data
+        var dist = document.getElementById('dist').value;
+        var w = document.getElementById('myRange3').value;
+        var seq1 = document.getElementById('data_n').value;
+        var seq2 = document.getElementById('data_m').value;
+
+        if ((seq1 == null || seq1 == "") && (seq2 == null || seq2 == "")) {
+            // the sequences are not defined
+            var n = document.getElementById('myRange').value; // columns
+            var m = document.getElementById('myRange2').value; // rows
+        }
+        else {
+            seq1 = seq1.split(",");
+            seq2 = seq2.split(",");
+            var n = seq1.length; // columns
+            var m = seq2.length; // rows
+
+        }
+
+        // scroll to view part
+        $('html, body').animate({
+            scrollTop: $("#view").offset().top
+        }, 2000);
+        // create the visual
+        d3.warping.matrix(n, m); // columns, rows
+
+    }
+    ;
+
+
+</script>
+
 </body>
 </html>
 
