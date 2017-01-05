@@ -4,8 +4,13 @@
 // 1 - Euclidean distance (need to take sqrt only from d[m-1][n-1])
 // 2 - Canberra distance
 // 3 - Minkowski distance with p = 3
+// window
+// 0 - whole plane
+// 1 - Sakoe Chiba Band
+// 2 - Itakura parallelogram
+// window_param - size of window
 
-dynamicTimeWarping = function(A, B, metric) {
+dynamicTimeWarping = function(A, B, metric, window, window_param) {
     var m = A.length; //rows
     var n = B.length; //columns
     var startX = 100;
@@ -42,21 +47,40 @@ dynamicTimeWarping = function(A, B, metric) {
             d[0][k].value = Math.pow(Math.abs(B[k]-A[0]), 3) + d[0][k-1].value;
 
     }
-    for (var l = 1; l < m; l++){
-        for (var p = 1; p < n; p++){
-            var dist = 0;
-            if (metric == 0)
-                dist = Math.abs(A[l]-B[p]);
-            else if (metric == 1)
-                dist = Math.pow(A[l]-B[p], 2);
-            else if (metric == 2)
-                dist = Math.round(Math.abs(B[l]-A[p]) / (Math.abs(B[l]),2) + Math.abs(A[p]));
-            else if (metric == 3)
-                dist = Math.pow(Math.abs(A[l]-B[p]), 3);
-            // min(diagonal, up, left)
-            d[l][p].value = dist + Math.min(d[l-1][p-1].value, d[l-1][p].value, d[l][p-1].value);
+    // must have m = n?
+    // Sakoe Chiba Band: max window_param = m/2-1
+    if (window == 1){
+        for (var r = 0; r < m; r++){
+            for (var t = 0; t < n; t++){
+            if (Math.abs(r-t) <= window_param)
+                d[r][t] = Infinity;
+            }
+         }
+    }
+    //Itakura parallelogram
+    else if (window==2){
+        //TODO
+    }
+    //TODO: calculate only for window
+    if (1==1){
+        for (var l = 1; l < m; l++){
+            for (var p = 1; p < n; p++){
+                var dist = 0;
+                if (metric == 0)
+                    dist = Math.abs(A[l]-B[p]);
+                else if (metric == 1)
+                    dist = Math.pow(A[l]-B[p], 2);
+                else if (metric == 2)
+                    dist = Math.round(Math.abs(B[l]-A[p]) / (Math.abs(B[l]),2) + Math.abs(A[p]));
+                else if (metric == 3)
+                    dist = Math.pow(Math.abs(A[l]-B[p]), 3);
+                // min(diagonal, up, left)
+                d[l][p].value = dist + Math.min(d[l-1][p-1].value, d[l-1][p].value, d[l][p-1].value);
+            }
         }
     }
+   
+
     // distance is d[m-1][n-1] for Euclidean, Canberra need to take root
     var distance =  d[m-1][n-1].value;
      if (metric == 1)
