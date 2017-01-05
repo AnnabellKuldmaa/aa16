@@ -23,7 +23,7 @@ dynamicTimeWarping = function(A, B, metric) {
             d[j][0] = Math.pow(A[j]-B[0], 2) + d[j-1][0];
         else if (metric == 2)
             d[j][0] = Math.round(Math.abs(A[j]-B[0]) / (Math.abs(A[j]) + Math.abs(B[0])),2) + d[j-1][0];
-        else
+        else if (metric == 3)
             d[j][0] = Math.pow(Math.abs(A[j]-B[0]), 3) + d[j-1][0];
     }
     for (var k = 1; k < n; k++){
@@ -33,7 +33,7 @@ dynamicTimeWarping = function(A, B, metric) {
             d[0][k] = Math.pow(B[k]-A[0], 2) + d[0][k-1];
         else if (metric == 2)
             d[0][k] = Math.round(Math.abs(B[k]-A[0]) / (Math.abs(B[k]) + Math.abs(A[0])),2) + d[0][k-1];
-        else (metric == 3)
+        else if (metric == 3)
             d[0][k] = Math.pow(Math.abs(B[k]-A[0]), 3) + d[0][k-1];
     }
     for (var l = 1; l < m; l++){
@@ -45,7 +45,7 @@ dynamicTimeWarping = function(A, B, metric) {
                 dist = Math.pow(A[l]-B[p], 2);
             else if (metric == 2)
                 dist = Math.round(Math.abs(B[l]-A[p]) / (Math.abs(B[l]),2) + Math.abs(A[p]))
-            else 
+            else if (metric == 3)
                 dist = Math.pow(Math.abs(A[l]-B[p]), 3);
             // min(diagonal, up, left)
             d[l][p] = dist + Math.min(d[l-1][p-1], d[l-1][p], d[l][p-1]);
