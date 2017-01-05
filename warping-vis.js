@@ -101,14 +101,22 @@ if (!d3) {
 
         var values = [].concat.apply([], data_mat);
         var heatmapColor = d3.interpolateWarm;
-
-        /*var heatmapColor = d3.scale.log()
+        //var heatmapColor = d3.interpolateRainbow;
+        var min = d3.min(values, function (d) {
+            return d.value;
+        });
+        var max = d3.max(values, function (d) {
+            return d.value;
+        });
+        var turnaround = d3.scale.linear().domain([0,1]).range([1,0]);
+        /*var heatmapColor = d3.scale.linear()
          .domain([d3.min(values, function (d) {
          return d.value;
          }), d3.max(values, function (d) {
          return d.value;
          })])
-         .range(["#FFF0F0", "#8b0000"]);*/
+         .range(["#FFF0F0", "#8b0000"])
+         .interpolate(d3.interpolateRainbow);*/
 
         // create svg element
         var chart = d3.select("#view")
@@ -141,14 +149,15 @@ if (!d3) {
             .attr("width", box_w)
             .attr("height", box_w)
             .on('mouseover', function () {
-                d3.select(this)
-                    .style('fill', '#FFF');
+                /*d3.select(this)
+                    .style('fill', '#FFF');*/
             })
             .on('mouseout', function () {
-                d3.select(this)
+                /*d3.select(this)
                     .style('fill', function (d) {
-                        return heatmapColor(d.value);
-                    });
+                        return heatmapColor((d.value - min)/(max-min));
+                        //return heatmapColor(d.value);
+                    });*/
             })
             /*.on('click', function () {
              console.log(d3.select(this));
@@ -182,7 +191,8 @@ if (!d3) {
             ruut.transition()
                 .delay(i * 100)
                 .style("fill", function (d) {
-                    return heatmapColor(d.value);
+                    return heatmapColor(turnaround((d.value - min)/(max-min)));
+                    //return heatmapColor((d.value - min)/(max-min));
                 });
             title.transition()
                 .delay(i * 101)
@@ -348,7 +358,6 @@ if (!d3) {
             .attr("stroke-dashoffset", 0);
 
         line2.attr("transform", "translate(" + 45 + "," + (100 + box_w / 2) + ")");
-
 
 
         // Create the alignment line charts
