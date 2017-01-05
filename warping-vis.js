@@ -11,8 +11,7 @@ if (!d3) {
         //var startY = box_w / 2;
         var startX = 100;
         var startY = 100;
-        var stepX = box_w;
-        var stepY = box_w;
+        var step = box_w;
         var xpos = startX;
         var ypos = startY;
         var newValue = 0;
@@ -26,51 +25,48 @@ if (!d3) {
                     x: xpos,
                     y: ypos,
                 });
-                xpos += stepX;
+                xpos += step;
             }
             xpos = startX;
-            ypos += stepY;
+            ypos += step;
         }
         return data;
     };
 
-    generate_random = function (n, m) {
-        var d1 = []; // timeseries 1
-        var d2 = []; // timeseries 2
+    d3.warping.generate_random = function (n, m) {
+        var seq1 = []; // timeseries 1
+        var seq2 = []; // timeseries 2
         for (var i = 0; i < n; i++) {           // Loop n times
             var newNumber = Math.floor(Math.random() * 20);  // New random number (0-30)
-            d1.push(newNumber);             // Add new number to array
+            seq1.push(newNumber);             // Add new number to array
         }
         for (var i = 0; i < m; i++) {           // Loop m times
             var newNumber = Math.floor(Math.random() * 20);  // New random number (0-30)
-            d2.push(newNumber);             // Add new number to array
+            seq2.push(newNumber);             // Add new number to array
         }
-        return {"d1": d1, "d2": d2};
+        return {"seq1": seq1, "seq2": seq2};
     };
 
 
     // Distance/cost matrix (n is y-axis and m is x-axis)
-    d3.warping.matrix = function (n, m) {
+    d3.warping.matrix = function (seq1, seq2, data_mat, path) {
         // Define the div for the tooltip
         var div = d3.select("body").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
 
-        var margin = 400;
+        var n = seq1.length;
+        var m = seq2.length;
+        var margin = 200;
         var box_w = 25; // size of the matrix box
         var width = n * (box_w) + margin;
         var height = m * (box_w) + margin;
 
-        var data = genRandom(n, m, box_w);
-        console.log(data);
-        //var dat = zero2D(n, m);
-
-        var dat = generate_random(n, m);
-        var d1 = dat.d1; //n
-        var d2 = dat.d2; //m
+        //var data = genRandom(n, m, box_w);
+        //console.log(data);
 
         var y = d3.scale.linear().range([30, 0]);
-        y.domain(d3.extent(d1, function (d) {
+        y.domain(d3.extent(seq1, function (d) {
             return d;
         }));
         var x = d3.scale.linear()
@@ -78,7 +74,7 @@ if (!d3) {
         x.domain([0, n]);
 
         var y2 = d3.scale.linear().range([30, 0]);
-        y2.domain(d3.extent(d2, function (d) {
+        y2.domain(d3.extent(seq2, function (d) {
             return d;
         }));
         var x2 = d3.scale.linear()
@@ -103,14 +99,16 @@ if (!d3) {
                 return y2(d);
             });
 
-        var values = [].concat.apply([], data);
-        var heatmapColor = d3.scale.linear()
-            .domain([d3.min(values, function (d) {
-                return d.value;
-            }), d3.max(values, function (d) {
-                return d.value;
-            })])
-            .range(["#FFF0F0", "#8b0000"]);
+        var values = [].concat.apply([], data_mat);
+        var heatmapColor = d3.interpolateWarm;
+
+        /*var heatmapColor = d3.scale.log()
+         .domain([d3.min(values, function (d) {
+         return d.value;
+         }), d3.max(values, function (d) {
+         return d.value;
+         })])
+         .range(["#FFF0F0", "#8b0000"]);*/
 
         // create svg element
         var chart = d3.select("#view")
@@ -124,7 +122,7 @@ if (!d3) {
 
         // Create the matrix grid and lines
         var row = matrix.selectAll(".row")
-            .data(data)
+            .data(data_mat)
             .enter().append("g")
             .attr("class", "row");
 
@@ -134,10 +132,10 @@ if (!d3) {
             })
             .enter().append("rect")
             .attr("class", "cell")
-            .attr("x", function (d) {
+            .attr("x", function (d, i) {
                 return d.x;
             })
-            .attr("y", function (d) {
+            .attr("y", function (d, i) {
                 return d.y;
             })
             .attr("width", box_w)
@@ -152,48 +150,59 @@ if (!d3) {
                         return heatmapColor(d.value);
                     });
             })
-            .on('click', function () {
-                console.log(d3.select(this));
-            })
+            /*.on('click', function () {
+             console.log(d3.select(this));
+             })*/
             .style("stroke", '#555')
             .style('fill', '#FFF');
-
-        var cols = d3.selectAll(".cell")[0];
-
-        for (var i = 0; i < cols.length; ++i) {
-            var ruut = d3.select(cols[i]);
-            ruut.transition()
-                .delay(i * 100)
-                .style("fill", function (d) {
-                    return heatmapColor(d.value);
-                });
-
-        }
-        /*.style("fill", function (d) {
-         return heatmapColor(d.value);
-         });*/
 
         var text = row.selectAll(".label")
             .data(function (d) {
                 return d;
             })
             .enter().append("text")
+            .attr("class", "mylabel")
             .attr("x", function (d) {
                 return d.x + box_w / 2
             })
             .attr("y", function (d) {
                 return d.y + box_w / 2
-            })
-            .attr("text-anchor", "middle")
-            .attr("dy", ".35em")
-            .text(function (d) {
-                return d.value
             });
+        /*.attr("font-size", "8px")
+         .text(function (d) {
+         return d.value
+         });*/
+
+        var cols = d3.selectAll(".cell")[0];
+        var titles = d3.selectAll(".mylabel")[0];
+
+        for (var i = 0; i < cols.length; ++i) {
+            var ruut = d3.select(cols[i]);
+            var title = d3.select(titles[i]);
+            ruut.transition()
+                .delay(i * 100)
+                .style("fill", function (d) {
+                    return heatmapColor(d.value);
+                });
+            title.transition()
+                .delay(i * 101)
+                .attr("text-anchor", "middle")
+                .attr("dy", ".35em")
+                .attr("font-size", "8px")
+                .attr("font-weight", "normal")
+                .text(function (d) {
+                    return d.value
+                });
+
+
+        }
+        ;
+
 
         var ylabels = matrix.append("g")
             .attr("class", "y axis")
             .selectAll(".ylabel")
-            .data(d2)
+            .data(seq2)
             .enter().append("text")
             .text(function (d, i) {
                 return i;
@@ -203,12 +212,13 @@ if (!d3) {
                 return i * box_w + 100;
             })
             .style("text-anchor", "end")
+            .attr("font-size", "8px")
             .attr("transform", "translate(-6," + box_w / 1.5 + ")");
 
         var xlabels = matrix.append("g")
             .attr("class", "x axis")
             .selectAll(".xlabel")
-            .data(d1)
+            .data(seq1)
             .enter().append("text")
             .text(function (d, i) {
                 return i;
@@ -218,6 +228,7 @@ if (!d3) {
                 return i * box_w + 100;
             })
             .style("text-anchor", "middle")
+            .attr("font-size", "8px")
             .attr("transform", "translate(" + box_w / 2 + ", -6)");
 
         var line1 = matrix.append("g")
@@ -225,10 +236,10 @@ if (!d3) {
 
         var path1 = line1.append("path")
             .attr("class", "line1")
-            .attr("d", valueline1(d1));
+            .attr("d", valueline1(seq1));
 
         line1.selectAll("dot")
-            .data(d1)
+            .data(seq1)
             .enter().append("circle")
             .attr("r", 0)
             .attr("class", "line1_dot")
@@ -268,15 +279,11 @@ if (!d3) {
             .attr("class", "linechart");
         var path2 = line2.append("path")
             .attr("class", "line2")
-            .attr("d", valueline2(d2));
+            .attr("d", valueline2(seq2));
 
         line2.selectAll("dot")
-            .data(d2)
+            .data(seq2)
             .enter().append("circle")
-
-            //.duration(function (d, i) {
-            //    return 2000 * i;
-            //})
             .attr("r", 0)
             .attr("class", "line2_dot")
             .style("fill", "#000")
@@ -303,7 +310,7 @@ if (!d3) {
         line1.selectAll("circle.line1_dot")
             .transition()
             .delay(function (d, i) {
-                return 3000/(d1.length) * i;
+                return 3000 / (seq1.length) * i;
             })
             .ease("linear")
             .attr("r", 2.5)
@@ -318,7 +325,7 @@ if (!d3) {
         line2.selectAll("circle.line2_dot")
             .transition()
             .delay(function (d, i) {
-                return 3000/(d2.length) * i;
+                return 3000 / (seq2.length) * i;
             })
             .ease("linear")
             .attr("r", 2.5)
@@ -342,21 +349,23 @@ if (!d3) {
 
         line2.attr("transform", "translate(" + 45 + "," + (100 + box_w / 2) + ")");
 
+
+
         // Create the alignment line charts
         function subtractArrays(ar1, ar2) {
             var ar3 = [];
             for (var i in ar1)
                 ar3.push(Math.abs(ar1[i] - ar2[i]));
             return ar3;
-        }
+        };
 
-
-        var min_distance = Math.min(subtractArrays(d1, d2));
+        var min_distance = Math.min(subtractArrays(seq1, seq2));
         var sep = min_distance < 30 ? 50 : 20;
-        var align_data = [{id: "d1", "values": d1}, {
-            id: "d2", "values": d2.map(function (d) {
-                return (d + sep);
-            })
+        var n_seq2 = seq2.map(function (d) {
+            return (d + sep);
+        });
+        var align_data = [{id: "seq1", values: seq1}, {
+            id: "seq2", values: n_seq2
         }];
         var z = d3.scale.ordinal().range(["blue", "green"]);
 
@@ -372,7 +381,6 @@ if (!d3) {
             .data(align_data)
             .enter().append("g")
             .attr("class", "alignment");
-        //.attr("transform", "translate(50," + (100+box_w/2)+ ")");
 
         alignment.append("path")
             .attr("class", "line")
@@ -422,6 +430,10 @@ if (!d3) {
 
         }
         ;
+
+        // Show the path
+
+        console.log(path);
         var dims_mat = d3.select(".matrix").node().getBBox();
         var dims_line = d3.select(".linedata").node().getBBox()
 
