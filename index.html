@@ -13,9 +13,13 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.6.0/css/bootstrap-slider.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript"
+            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
 
     <title>Dynamic Time Warping</title>
     <style>
+
         /* Remove the navbar's default margin-bottom and rounded borders */
         .navbar {
             margin-bottom: 0;
@@ -47,10 +51,10 @@
         }
 
         #view {
-            margin: 50px;
+            margin: 30px;
         }
 
-        div.tooltip {
+        div.tooltip1 {
             position: absolute;
             text-align: center;
             width: 60px;
@@ -63,10 +67,22 @@
             pointer-events: none;
         }
 
+        div.tooltip2 {
+            position: absolute;
+            text-align: center;
+            width: 60px;
+            padding: 2px;
+            font: 12px sans-serif;
+            background: lightsteelblue;
+            border: 0px;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
         .footer {
             background-color: #555;
             color: white;
-            padding: 15px;
+            padding: 10px;
             position: absolute;
             bottom: 0;
             width: 100%;
@@ -141,11 +157,20 @@
 <div class="container-fluid text-center">
 
     <div class="tab-content">
-        <div class="tab-pane content fade in active" id="home" role="tabpanel">
+        <div class="tab-pane fade in active" id="home" role="tabpanel">
             <div class="col-sm-12">
                 <h1>Dynamic Time Warping</h1>
 
                 <p>Siia tuleb sissejuhatav kirjeldus</p>
+
+                <p>Let's consider
+                    <math>
+                        <mi>a</mi>
+                        <mo>≠</mo>
+                        <mn>0</mn>
+                    </math>
+                    .
+                </p>
                 <hr>
             </div>
 
@@ -164,6 +189,18 @@
                                     <option value=1>Euclidean distance</option>
                                     <option value=2>Canberra distance</option>
                                     <option value=3>Minkowski distance (with p = 3)</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <div class="form-group form-group-sm row text-left">
+                            <label for="constraint" class="col-sm-3">Global constraints:</label>
+
+                            <div class="col-sm-8">
+                                <select class="form-control input-sm" id="constraint" style="width:50%;">
+                                    <option value=0 selected>No constraints</option>
+                                    <option value=1>Sakoe Shiba Band</option>
+                                    <option value=2>Itakura parallelogram</option>
                                 </select>
                             </div>
 
@@ -193,7 +230,7 @@
                                     <span id="myValue"></span>
                                 </span>
                                 <input type="range" id="myRange"
-                                       name="myRange" min="3" max="200" value="10" step="1">
+                                       name="myRange" min="3" max="80" value="10" step="1">
                             </div>
                             <div class="col-sm-4">
                                 <span style="position:absolute; color:grey;">
@@ -201,7 +238,7 @@
                                 </span>
 
                                 <input type="range" id="myRange2"
-                                       name="myRange2" min="3" max="200" value="10" step="1">
+                                       name="myRange2" min="3" max="80" value="10" step="1">
                             </div>
                         </div>
                         <!-- <div class="row text-left">
@@ -221,14 +258,14 @@
                         <div class="form-group form-group-sm row">
                             <div class="col-sm-8">
                                 <input type="text" class="form-control input-sm" id="data_n"
-                                       placeholder="Insert sequence 1 (separated by comma)"/>
+                                       placeholder="Insert sequence 1 (separated by comma, e.g. 1,2,5,5,5,5,4,4,4)"/>
                             </div>
                         </div>
 
                         <div class="form-group form-group-sm row">
                             <div class="col-sm-8">
                                 <input type="text" class="form-control input-sm" id="data_m"
-                                       placeholder="Insert sequence 2 (separated by comma)"/>
+                                       placeholder="Insert sequence 2 (separated by comma, e.g. 2,3,5,6,6,4,4,7,8)"/>
                             </div>
                         </div>
                         <div class="form-group form-group-sm row">
@@ -244,7 +281,12 @@
             </div>
 
             <div class="container">
+                <div id="sequences" class="col-sm-10">
+                </div>
                 <div class="col-sm-10" id="view">
+                </div>
+                <div class="col-sm-10">
+                    <p id="calc_formula">Siia tuleb formula</p>
                 </div>
             </div>
 
@@ -261,7 +303,7 @@
 
     </div>
 </div>
-
+<br><br>
 <footer class="footer text-center">
     <p>&copy; 2017 Annabell Kuldmaa & Liis Kolberg | Project in course "Advanced Algorithmics"</p>
 
@@ -278,17 +320,10 @@
 <script src="https://d3js.org/d3-time.v1.min.js"></script>
 <script src="https://d3js.org/d3-time-format.v2.min.js"></script>
 <script src="https://d3js.org/d3-scale.v1.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script type="text/javascript" src="warping-vis.js"></script>
 <script type="text/javascript" src="algorithm.js"></script>
 
-<script>
-    $('#generate').on('click', function (e) {
-        document.getElementById("view").innerHTML = "";
-        var n = Math.floor((Math.random() * 20) + 3);
-        var m = Math.floor((Math.random() * 20) + 3);
-        d3.warping.matrix(n, m);
-    });
-</script>
 <script type="text/javascript" charset="utf-8">
     var myRange = document.querySelector('#myRange');
     var myValue = document.querySelector('#myValue');
@@ -336,6 +371,7 @@
         myValue3.parentElement.style.left = px3 + 'px';
     };
 </script>
+
 <script type="text/javascript">
     $('#myNavbar a').click(function (e) {
         e.preventDefault()
@@ -344,11 +380,20 @@
 </script>
 
 <script type="text/javascript">
+    function wait(ms) {
+        var start = new Date().getTime();
+        var end = start;
+        while (end < start + ms) {
+            end = new Date().getTime();
+        }
+    }
+    ;
     function startDTW() {
         document.getElementById("view").innerHTML = ""; // empty the view
+        document.getElementById("sequences").innerHTML = "";
         // read the form data
         var dist = document.getElementById('dist').value;
-
+        var window = document.getElementById('constraint').value;
         var w = document.getElementById('myRange3').value;
         var seq1 = document.getElementById('data_n').value;
         var seq2 = document.getElementById('data_m').value;
@@ -366,18 +411,21 @@
             seq2 = seq2.split(",").map(Number); //rows
 
         }
+        // show sequence values
+        document.getElementById('sequences').innerHTML = "<table class='table table-bordered'><tr style='color:blue;'><td>Sequence 1</td><td><span id='seq1'></span></td></tr> <tr style='color:green;'><td>Sequence 2</td><td><span id='seq2'></span></td></tr> </table>";
+        document.getElementById('seq1').innerHTML = seq1;
+        document.getElementById('seq2').innerHTML = seq2;
 
         // scroll to view part
         $('html, body').animate({
             scrollTop: $("#view").offset().top
-        }, 2000);
-
+        }, 1000);
         // create the visual
+        //var d = dynamicTimeWarping(seq2, seq1, dist,window, w);
         var d = dynamicTimeWarping(seq2, seq1, dist);
-        console.log(d.data);
-        console.log(d.distance);
+
         var path = warpingPath(d.data);
-        console.log(path);
+
         d3.warping.matrix(seq1, seq2, d.data, path); // columns, rows, cost matrix
 
     }
