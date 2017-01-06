@@ -9,7 +9,7 @@
 // 1 - Sakoe Chiba Band
 // 2 - Itakura parallelogram
 // window_param - size of window
-// window_param - parameter size for Sakoe Chiba and Itakura
+// window_param - parameter size for Sakoe Chiba
 
 dynamicTimeWarping = function (A, B, metric, window, window_param) {
     var m = A.length; //rows
@@ -49,12 +49,12 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
 
     }
     // must have m = n?
-    // Sakoe Chiba Band: max window_param = m/2-1
+    // Sakoe Chiba Band
     // Fill only the columns that satisfy |r-t| <= window_param, otherwise set to Infinity
     if (window == 1) {
         for (var r = 0; r < m; r++) {
             for (var t = 0; t < n; t++) {
-                if (Math.abs(r - t) > window_param)
+                if (Math.abs(r - t) > parseInt(window_param))
                     d[r][t].value = Infinity;
             }
         }
@@ -70,7 +70,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     }
     console.log(d);
     //calculate only for window
-    if (window == 0 || window == 1) {
+    if (window == 0) {
         for (var l = 1; l < m; l++) {
             for (var p = 1; p < n; p++) {
                 var dist = 0;
@@ -88,10 +88,9 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
             }
         }
     }
-    // FIXME
-    else if (window == 10) {
+    else if (window == 1) {
         for (var l = 1; l < m; l++) {
-            for (var p = Math.max(l - window_param, 1); p < Math.min(n, window_param + 1); p++) {
+            for (var p = Math.max(l - parseInt(window_param), 1); p < Math.min(n, l + parseInt(window_param) + 1); p++) {
                 if (metric == 0)
                     dist = Math.abs(A[l] - B[p]);
                 else if (metric == 1)
@@ -169,8 +168,6 @@ warpingPath = function (d) {
     return path;
 }
 ;
-// TODO: check if correct: n and m must be switched?
-// returns true if out of window
 itakura = function (i, j, n, m) {
     return (j < 2 * i) && (i <= 2 * j) && (i >= n - 1 - 2 * (m - j)) && (j > m - 1 - 2 * (n - i));
 };
