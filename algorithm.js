@@ -63,14 +63,14 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     else if (window == 2) {
         for (var r = 0; r < m; r++) {
             for (var t = 0; t < n; t++) {
-                if (itakura(r, t, m, n))
+                if (!(itakura(r+1, t+1, m, n)))
                     d[r][t].value = Infinity;
             }
         }
     }
     console.log(d);
     //calculate only for window
-    if (window == 0) {
+    if (window == 0 || window == 1) {
         for (var l = 1; l < m; l++) {
             for (var p = 1; p < n; p++) {
                 var dist = 0;
@@ -83,11 +83,13 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                 else if (metric == 3)
                     dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                 // min(diagonal, up, left)
+                if (!(d[l][p].value === Infinity))
                 d[l][p].value = dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
             }
         }
     }
-    else if (window == 1) {
+    // FIXME
+    else if (window == 10) {
         for (var l = 1; l < m; l++) {
             for (var p = Math.max(l - window_param, 1); p < Math.min(n, window_param + 1); p++) {
                 if (metric == 0)
@@ -106,7 +108,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     else if (window == 2) {
         for (var l = 1; l < m; l++) {
             for (var p = 1; p < n; p++) {
-                if (itakura(l, p, m, n)) {
+                if (itakura(l+1, p+1, m, n)) {
                     if (metric == 0)
                         dist = Math.abs(A[l] - B[p]);
                     else if (metric == 1)
