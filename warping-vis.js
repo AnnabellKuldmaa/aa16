@@ -185,7 +185,7 @@ if (!d3) {
                     if (neigh[0].length > 0) {
                         neigh[0].map(function (d) {
                             d3.select(d).style('fill', function (d) {
-                                return heatmapColor(turnaround((d.value - min) / (max - min)));
+                                return  d.value==Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
                                 //return heatmapColor(d.value);
                             })
                         });
@@ -193,7 +193,7 @@ if (!d3) {
 
                     d3.select(this)
                         .style('fill', function (d) {
-                            return heatmapColor(turnaround((d.value - min) / (max - min)));
+                            return d.value==Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
                             //return heatmapColor(d.value);
                         });
                     div2.transition()
@@ -227,7 +227,7 @@ if (!d3) {
                         return (n < 20 && m < 20) ? i * 100 : i * 5;
                     })
                     .style("fill", function (d) {
-                        return heatmapColor(turnaround((d.value - min) / (max - min)));
+                        return d.value==Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
                         //return heatmapColor((d.value - min)/(max-min));
                     });
 
@@ -240,7 +240,7 @@ if (!d3) {
                     .attr("font-size", "8px")
                     .attr("font-weight", "normal")
                     .text(function (d) {
-                        return (n < 26 && m < 26) ? d.value : "";
+                        return (n < 26 && m < 26) ? (d.value==Infinity ? "Inf" : d.value) : "";
                     });
             }
             ;
