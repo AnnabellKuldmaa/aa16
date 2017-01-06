@@ -68,6 +68,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
             }
         }
     }
+    console.log(d);
     //calculate only for window
     if (window == 0) {
         for (var l = 1; l < m; l++) {
@@ -88,7 +89,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     }
     else if (window == 1) {
         for (var l = 1; l < n; l++) {
-            for (var p = Math.max(l - window_param, 1); p < Math.min(l + window_param + 1); p++) {
+            for (var p = Math.max(l - window_param, 1); p < Math.min(m, window_param + 1); p++) {
                 if (metric == 0)
                     dist = Math.abs(A[l] - B[p]);
                 else if (metric == 1)
