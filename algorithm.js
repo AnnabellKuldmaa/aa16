@@ -6,12 +6,12 @@
 // 3 - Minkowski distance with p = 3
 // window
 // 0 - whole plane
-// 1 - Sakoe Shiba Band
+// 1 - Sakoe Chiba Band
 // 2 - Itakura parallelogram
 // window_param - size of window
+// window_param - parameter size for Sakoe Chiba and Itakura
 
-
-dynamicTimeWarping = function (A, B, metric, window, window_param) {
+dynamicTimeWarping = function (A, B, metric, window = 0, window_param = 0) {
     var m = A.length; //rows
     var n = B.length; //columns
     var startX = 100;
@@ -48,23 +48,28 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
             d[0][k].value = Math.pow(Math.abs(B[k] - A[0]), 3) + d[0][k - 1].value;
 
     }
-
     // must have m = n?
     // Sakoe Chiba Band: max window_param = m/2-1
-    if (window == 1) {
-        for (var r = 0; r < m; r++) {
-            for (var t = 0; t < n; t++) {
-                if (Math.abs(r - t) <= window_param)
-                    d[r][t] = Infinity;
+    // Fill only the columns that satisfy |r-t| <= window_param, otherwise set to Infinity
+    if (window == 1){
+        for (var r = 0; r < m; r++){
+            for (var t = 0; t < n; t++){
+            if (Math.abs(r-t) > window_param)
+                d[r][t] = Infinity;
             }
-        }
+         }
     }
-    //Itakura parallelogram
-    else if (window == 2) {
-        //TODO
+    // Itakura parallelogram
+    else if (window==2){
+        for (var r =  0; r < m; r++){
+            for (var t = 0; t < n; t++){
+            if (itakura(r,t,m,n))
+                d[r][t] = Infinity;
+            }
+         }
     }
-    //TODO: calculate only for window
-    if (1 == 1) {
+    //calculate only for window
+    if (window == 0) {
         for (var l = 1; l < m; l++) {
             for (var p = 1; p < n; p++) {
                 var dist = 0;
@@ -81,7 +86,39 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
             }
         }
     }
-
+    else if (window == 1){
+        for (var l = 1; l < n; l++){
+            for (var p = Math.max(l-window_param, 1); p < Math.min(l + window_param +1); p++){
+                if (metric == 0)
+                    dist = Math.abs(A[l]-B[p]);
+                else if (metric == 1)
+                    dist = Math.pow(A[l]-B[p], 2);
+                else if (metric == 2)
+                    dist = Math.round(Math.abs(B[l]-A[p]) / (Math.abs(B[l]),2) + Math.abs(A[p]));
+                else if (metric == 3)
+                    dist = Math.pow(Math.abs(A[l]-B[p]), 3);
+                // min(diagonal, up, left)
+                d[l][p].value = dist + Math.min(d[l-1][p-1].value, d[l-1][p].value, d[l][p-1].value);
+            }
+       }
+    }
+    else if (window == 2){
+        for (var l = 1; l < m; l++){
+            for (var p = 1; p < n; p++){
+            	if (itakura(l,p,m,n)){
+                    if (metric == 0)
+                        dist = Math.abs(A[l]-B[p]);
+                    else if (metric == 1)
+                        dist = Math.pow(A[l]-B[p], 2);
+                    else if (metric == 2)
+                        dist = Math.round(Math.abs(B[l]-A[p]) / (Math.abs(B[l]),2) + Math.abs(A[p]));
+                    else if (metric == 3)
+                        dist = Math.pow(Math.abs(A[l]-B[p]), 3);
+            		d[l][p].value = dist + Math.min(d[l-1][p-1].value, d[l-1][p].value, d[l][p-1].value);
+            	}
+            }
+         }
+    }
 
     // distance is d[m-1][n-1] for Euclidean, Canberra need to take root
     var distance = d[m - 1][n - 1].value;
@@ -103,7 +140,7 @@ warpingPath = function (d) {
     //path.push([i,j]);
     path.push([d[i][j].x + box_w, d[i][j].y + box_w]); // so that the line starts from the bottom corner
     path.push([d[i][j].x, d[i][j].y]);
-    while (i > 0 && j > 0) {
+    while (!(i == 0 && j == 0)) {
         console.log(i);
         console.log(j);
         if (i == 0)
@@ -127,4 +164,9 @@ warpingPath = function (d) {
     //path.push([0,0]);
     path.push([d[0][0].x, d[0][0].y]);
     return path;
+};
+// TODO: check if correct: n and m must be switched?
+// returns true if out of window
+itakura = function(i,j,n,m){
+    return (j < 2*i) && (i <= 2*j) && (i>= n-1-2*(m-j)) && (j > m-1-2*(n-i));
 };
