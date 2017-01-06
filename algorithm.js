@@ -55,7 +55,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
         for (var r = 0; r < m; r++) {
             for (var t = 0; t < n; t++) {
                 if (Math.abs(r - t) > window_param)
-                    d[r][t] = Infinity;
+                    d[r][t].value = Infinity;
             }
         }
     }
@@ -64,7 +64,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
         for (var r = 0; r < m; r++) {
             for (var t = 0; t < n; t++) {
                 if (itakura(r, t, m, n))
-                    d[r][t] = Infinity;
+                    d[r][t].value = Infinity;
             }
         }
     }
