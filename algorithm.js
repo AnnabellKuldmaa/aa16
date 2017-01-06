@@ -95,15 +95,15 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
 
 // returns warping path given cost matrix
 warpingPath = function (d) {
-    var i = d.length - 1;
-    var j = d[0].length - 1;
+    var i = d.length - 1; //row
+    var j = d[0].length - 1;//column
     var box_w = (d.length < 26 && d[0].length < 26) ? 25 : 10;
     var path = Array();
-
+    console.log(d);
     //path.push([i,j]);
     path.push([d[i][j].x + box_w, d[i][j].y + box_w]); // so that the line starts from the bottom corner
     path.push([d[i][j].x, d[i][j].y]);
-    while (i > 0 && j > 0) {
+    while (i >0 || j > 0) {
         console.log(i);
         console.log(j);
         if (i == 0)
