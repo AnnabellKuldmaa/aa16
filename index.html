@@ -421,8 +421,8 @@
             scrollTop: $("#view").offset().top
         }, 1000);
         // create the visual
-        //var d = dynamicTimeWarping(seq2, seq1, dist,window, w);
-        var d = dynamicTimeWarping(seq2, seq1, dist);
+        var d = dynamicTimeWarping(seq2, seq1, dist,window, w);
+        //var d = dynamicTimeWarping(seq2, seq1, dist);
 
         var path = warpingPath(d.data);
 
