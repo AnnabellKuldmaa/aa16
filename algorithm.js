@@ -142,7 +142,7 @@ warpingPath = function (d) {
     //path.push([i,j]);
     path.push([d[i][j].x + box_w, d[i][j].y + box_w]); // so that the line starts from the bottom corner
     path.push([d[i][j].x, d[i][j].y]);
-    while (i > 0 || j > 0) {
+    while (!(i == 0 && j == 0)) {
         console.log(i);
         console.log(j);
         if (i == 0)
@@ -161,10 +161,10 @@ warpingPath = function (d) {
         }
 
         //path.push([j, i]);
-        path.push([d[j][i].x, d[j][i].y]);
+        path.push([d[i][j].x, d[i][j].y]);
     }
     //path.push([0,0]);
-    path.push([d[0][0].x, d[0][0].y]);
+    //path.push([d[0][0].x, d[0][0].y]);
     return path;
 }
 ;
