@@ -79,11 +79,10 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                 else if (metric == 1)
                     dist = Math.pow(A[l] - B[p], 2);
                 else if (metric == 2)
-                    dist = Math.round(Math.abs(B[l] - A[p]) / (Math.abs(B[l]), 2) + Math.abs(A[p]));
+                    dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])),2);
                 else if (metric == 3)
                     dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                 // min(diagonal, up, left)
-                if (!(d[l][p].value === Infinity))
                 d[l][p].value = dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
             }
         }
@@ -96,7 +95,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                 else if (metric == 1)
                     dist = Math.pow(A[l] - B[p], 2);
                 else if (metric == 2)
-                    dist = Math.round(Math.abs(B[l] - A[p]) / (Math.abs(B[l]), 2) + Math.abs(A[p]));
+                    dist = Math.round(Math.abs(A[l] - B[p]) /(Math.abs(A[l]) + Math.abs(B[p])),2);
                 else if (metric == 3)
                     dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                 // min(diagonal, up, left)
@@ -113,7 +112,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                     else if (metric == 1)
                         dist = Math.pow(A[l] - B[p], 2);
                     else if (metric == 2)
-                        dist = Math.round(Math.abs(B[l] - A[p]) / (Math.abs(B[l]), 2) + Math.abs(A[p]));
+                        dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])),2);
                     else if (metric == 3)
                         dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                     d[l][p].value = dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
