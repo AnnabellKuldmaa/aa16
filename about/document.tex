@@ -24,7 +24,7 @@
 \begin{document}
 	%TODO: citations: https://kar.kent.ac.uk/43498/1/HFAA%20paper%20-%20Tsinaslanidis%20etal.pdf
 	\subsection*{Introduction}
-	The task of the Dynamic Time Warping (DTW) algorithm is to measure the similarity between two sequences. DTW algorithm was introduced in \cite{Sakoe:1990:DPA:108235.108244} for speech recognition and since then has been applied to different problems in various fields such as bioinformatics \cite{journals/bioinformatics/AachC01}, entertainment \cite{Zhu:2003:WIE:872757.872780}, finance, medicine and engineering. The algorithm is is one of the most important dynamic programming algorithms and it is crucial to understand its steps.
+	The task of the Dynamic Time Warping (DTW) algorithm is to measure the similarity between two sequences. DTW algorithm was introduced in \cite{Sakoe:1990:DPA:108235.108244} for speech recognition and since then has been applied to different problems in various fields. The algorithm is is one of the most important dynamic programming algorithms and it is crucial to understand its steps.
 	
 	\subsection*{Algorithm}
 	
@@ -54,13 +54,36 @@
 		\end{algorithmic}
 		\end{algorithm}
 	%TODO: warping path and figure
-		Given a distance matrix, a warping path is found. Warping path is a ...
+
+		Given a distance matrix, a warping path is found. 
+		
+	\subsection*{Global constraints}
+	In order to speed up the DTW calculation and prevent pathological warpings, different constraints for warping window have been introduced. 
+	A global constraint constraints the indices of the warping path.
+	 Most common constrains are Sakoe-Chiba band and the Itakura parallelogram which require that the input sequences are of same length.
+	However, the usage of global constraint regions is also problematic, since the optimal warping path may traverse cells outside the specified constraint region. In other words, the resulting optimal (constrained) warping path generally does not coincide with the optimal (unconstrained) warping path.
+	
+	\subsubsection*{Sakoe-Chiba band}
+	Sakoe-Chiba band was introduced by Sakoe and Chiba in 1975 \cite{Sakoe:1990:DPA:108235.108244} for speech community.
+	It runs by the main diagonal having fixed window width.
+	%TODO: add figure.
+	\subsubsection*{Itakura parallelogram}	
+	Itakura parallelogram was introduced by Itakura in \cite{Itakura}.
+	The warping window constrains the slope of a
+	warping path, i.e., the Itakura parallelogram
+	consists of all cells that are traversed by some warping path having a slope. 
+	%TODO: add figure
+	\subsubsection*{Slanted band}	
+	Slanted band is a modification of Sakoe-Chiba band for the case where input sequences are of different length. Instead of main diagonal here slanted diagonal is used.
+	%TODO: add figure
+	
 		\subsection*{Applications}
 	Recall that DTW was introduced to compare different
 	speech patterns in automatic speech recognition \cite{Sakoe:1990:DPA:108235.108244}. In other disciplines such as
 	data mining and information retrieval, DTW has been successfully applied
-	to automatically cope with time deformations and different speeds associated
-	with time-dependent data. 
+	to automatically cope with time deformations and different speeds associated with time-dependent data. 
+	
+	 Some of the applications are as follows: bioinformatics \cite{journals/bioinformatics/AachC01}, entertainment \cite{Zhu:2003:WIE:872757.872780}, finance, medicine \cite{medicine} and robotics \cite{robtics}.
 	
 \bibliography{biblio} 
 \bibliographystyle{alpha}

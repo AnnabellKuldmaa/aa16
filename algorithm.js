@@ -8,7 +8,7 @@
 // 0 - whole plane
 // 1 - Sakoe Chiba Band
 // 2 - Itakura parallelogram
-// window_param - size of window
+// 3 - Slanted band (similar to Sakoe Chiba for  m!=n)
 // window_param - parameter size for Sakoe Chiba
 
 dynamicTimeWarping = function (A, B, metric, window, window_param) {
@@ -26,27 +26,35 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
             row.push({value: 0, x: (startX + s * step), y: (startY + i * step)});
         d.push(row);
     }
-    d[0][0].value = Math.abs(A[0] - B[0]);
-    for (var j = 1; j < m; j++) {
+    if (!(window == 3)){
         if (metric == 0)
-            d[j][0].value = Math.abs(A[j] - B[0]) + d[j - 1][0].value;
+            d[0][0].value = Math.abs(A[0] - B[0]);
         else if (metric == 1)
-            d[j][0].value = Math.pow(A[j] - B[0], 2) + d[j - 1][0].value;
+            d[0][0].value = Math.pow(A[0] - B[0], 2);
         else if (metric == 2)
-            d[j][0].value = Math.round(Math.abs(A[j] - B[0]) / (Math.abs(A[j]) + Math.abs(B[0])), 2) + d[j - 1][0].value;
+            d[0][0].value = Math.round(Math.abs(A[0] - B[0]) / (Math.abs(A[0]) + Math.abs(B[0])), 2);
         else if (metric == 3)
-            d[j][0].value = Math.pow(Math.abs(A[j] - B[0]), 3) + d[j - 1][0].value;
-    }
-    for (var k = 1; k < n; k++) {
-        if (metric == 0)
-            d[0][k].value = Math.abs(B[k] - A[0]) + d[0][k - 1].value;
-        else if (metric == 1)
-            d[0][k].value = Math.pow(B[k] - A[0], 2) + d[0][k - 1].value;
-        else if (metric == 2)
-            d[0][k].value = Math.round(Math.abs(B[k] - A[0]) / (Math.abs(B[k]) + Math.abs(A[0])), 2) + d[0][k - 1].value;
-        else if (metric == 3)
-            d[0][k].value = Math.pow(Math.abs(B[k] - A[0]), 3) + d[0][k - 1].value;
-
+            d[0][0].value = Math.pow(Math.abs(A[0] - B[0]), 3);
+        for (var j = 1; j < m; j++) {
+            if (metric == 0)
+                d[j][0].value = Math.abs(A[j] - B[0]) + d[j - 1][0].value;
+            else if (metric == 1)
+                d[j][0].value = Math.pow(A[j] - B[0], 2) + d[j - 1][0].value;
+            else if (metric == 2)
+                d[j][0].value = Math.round(Math.abs(A[j] - B[0]) / (Math.abs(A[j]) + Math.abs(B[0])), 2) + d[j - 1][0].value;
+            else if (metric == 3)
+                d[j][0].value = Math.pow(Math.abs(A[j] - B[0]), 3) + d[j - 1][0].value;
+        }
+        for (var k = 1; k < n; k++) {
+            if (metric == 0)
+                d[0][k].value = Math.abs(B[k] - A[0]) + d[0][k - 1].value;
+            else if (metric == 1)
+                d[0][k].value = Math.pow(B[k] - A[0], 2) + d[0][k - 1].value;
+            else if (metric == 2)
+                d[0][k].value = Math.round(Math.abs(B[k] - A[0]) / (Math.abs(B[k]) + Math.abs(A[0])), 2) + d[0][k - 1].value;
+            else if (metric == 3)
+                d[0][k].value = Math.pow(Math.abs(B[k] - A[0]), 3) + d[0][k - 1].value;
+        }
     }
     // must have m = n?
     // Sakoe Chiba Band
@@ -68,7 +76,52 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
             }
         }
     }
-    console.log(d);
+    // Slanted band
+    else if (window == 3) {
+        // all values to Infinity
+        for (var r = 0; r < m; r++) {
+            for (var t = 0; t < n; t++)
+                    d[r][t].value = Infinity;
+            }
+        var slant = n / m;
+        for (var r = 0; r < m ; r++) {
+            var slant_r = Math.ceil( r * slant);
+            for (var t = Math.max(slant_r - parseInt(window_param), 0); t < Math.min(n, slant_r + parseInt(window_param) + 1); t++) {
+            	if (r ==  0 && t == 0){
+                    if (metric == 0)
+                        d[0][0].value = Math.abs(A[0] - B[0]);
+                    else if (metric == 1)
+                        d[0][0].value = Math.pow(A[0] - B[0], 2);
+                    else if (metric == 2)
+                        d[0][0].value = Math.round(Math.abs(A[0] - B[0]) / (Math.abs(A[0]) + Math.abs(B[0])), 2);
+                    else if (metric == 3)
+                        d[0][0].value = Math.pow(Math.abs(A[0] - B[0]), 3);
+            	}
+            	else if (r == 0){
+            		//console.log(r,t)
+	                if (metric == 0)
+	                    d[0][t].value = Math.abs(A[0] - B[t]) + d[0][t - 1].value;
+	                else if (metric == 1)
+	                    d[0][t].value = Math.pow(A[0] - B[t], 2) + d[0][t - 1].value;
+	                else if (metric == 2)
+	                    d[0][t].value = Math.round(Math.abs(A[0] - B[t]) / (Math.abs(A[0]) + Math.abs(B[t])), 2) + d[0][t - 1].value;
+	                else if (metric == 3)
+	                    d[0][t].value = Math.pow(Math.abs(A[0] - B[t]), 3) + d[0][t - 1].value;
+	            	}
+            	else if (t == 0){
+            		console.log(r,t)
+                    if (metric == 0)
+                        d[r][0].value = Math.abs(A[r] - B[0]) + d[r-1][0].value;
+                    else if (metric == 1)
+                        d[r][0].value = Math.pow(A[r] - B[0], 2) + d[r-1][0].value;
+                    else if (metric == 2)
+                        d[r][0].value = Math.round(Math.abs(A[r] - B[0]) / (Math.abs(A[r]) + Math.abs(B[0])), 2) + d[r-1][0].value;
+                    else if (metric == 3)
+                        d[r][0].value = Math.pow(Math.abs(A[r] - B[0]), 3) + d[r-1][0].value;
+                	}
+            }
+        }
+    }
     //calculate only for window
     if (window == 0) {
         for (var l = 1; l < m; l++) {
@@ -120,6 +173,24 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
             }
         }
     }
+    else if (window == 3) {
+        var slant = n / m;
+        for (var l = 1; l < m ; l++) {
+            var slant_l = Math.ceil( l * slant);
+            for (var p = Math.max(slant_l - parseInt(window_param), 1); p < Math.min(n, slant_l + parseInt(window_param) + 1); p++) {
+                if (metric == 0)
+                    dist = Math.abs(A[l] - B[p]);
+                else if (metric == 1)
+                    dist = Math.pow(A[l] - B[p], 2);
+                else if (metric == 2)
+                    dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])),2);
+                else if (metric == 3)
+                    dist = Math.pow(Math.abs(A[l] - B[p]), 3);
+                d[l][p].value =dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
+                
+            }
+        }
+    }
 
     // distance is d[m-1][n-1] for Euclidean, Canberra need to take root
     var distance = d[m - 1][n - 1].value;
@@ -128,8 +199,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     else if (metric == 3)
         distance = Math.round(Math.pow(distance, 1 / 3), 2);
     return {"data": d, "distance": distance};
-}
-;
+};
 
 // returns warping path given cost matrix
 warpingPath = function (d) {
@@ -142,8 +212,6 @@ warpingPath = function (d) {
     path.push([d[i][j].x + box_w, d[i][j].y + box_w]); // so that the line starts from the bottom corner
     path.push([d[i][j].x, d[i][j].y]);
     while (!(i == 0 && j == 0)) {
-        console.log(i);
-        console.log(j);
         if (i == 0)
             j = j - 1;
         else if (j == 0)
