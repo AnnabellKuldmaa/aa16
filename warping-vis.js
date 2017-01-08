@@ -106,11 +106,12 @@ if (!d3) {
             var values = [].concat.apply([], data_mat);
             var heatmapColor = d3.interpolateWarm;
             //var heatmapColor = d3.interpolateRainbow;
+
             var min = d3.min(values, function (d) {
                 return d.value;
             });
             var max = d3.max(values, function (d) {
-                return d.value;
+                return d.value==Infinity ? 0 : d.value;
             });
             var turnaround = d3.scale.linear().domain([0, 1]).range([1, 0]);
             /*var heatmapColor = d3.scale.linear()
