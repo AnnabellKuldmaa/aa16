@@ -159,12 +159,14 @@
     <div class="tab-content">
         <div class="tab-pane fade in active" id="home" role="tabpanel">
             <div class="col-sm-12">
-                <h1>Dynamic Time Warping</h1>
+
+                <h2>Dynamic Time Warping</h2>
 
                 <p>
-                    Welcome to web application for visualizing the dynamic time warping. The construction of the warping
-                    matrix and search for the optimal warping path are dynamic and interactive.
-                    Select parameters and start visualizing! Learning DTW has never been easier and more fun!
+                <h5>Welcome to web application for visualizing the dynamic time warping. The construction of the warping
+                    matrix and search for the optimal warping path are dynamic and interactive.</h5></p>
+
+                <p><h5>Select parameters and start visualizing! Learning DTW has never been easier and more fun!</h5>
                 </p>
                 <hr>
             </div>
@@ -273,9 +275,9 @@
                 </div>
                 <div class="col-sm-12" id="view">
                 </div>
-                <div class="col-sm-12">
+                <!--<div class="col-sm-12">
                     <p id="calc_formula">Siia tuleb formula</p>
-                </div>
+                </div>-->
             </div>
 
 
@@ -308,79 +310,83 @@
                     Algorithm 1.
                     <br><br>
                     <img src="dtw.png" style="display: block;
-                    width = "300"; height = "200";margin: 0 auto;">
+                    width = " 300"; height = "200";margin: 0 auto;">
                 </section>
-               <section style="text-align: justify;">
+                <section style="text-align: justify;">
                     <h3>Global Constraints</h3>
                     <br>
-                    In order to speed up the DTW calculation and prevent pathological warpings, different constraints 
-                    for warping window have been introduced. 
+                    In order to speed up the DTW calculation and prevent pathological warpings, different constraints
+                    for warping window have been introduced.
                     A global constraint constraints the indices of the warping path.
-                     Most common constrains are Sakoe-Chiba band and the Itakura parallelogram which require that the input sequences are of same length.
-                    However, the usage of global constraint can also introduce new problems. The reason for that is that the optimal warping path may traverse cells outside the specified constraint region.
-                     In other words, the resulting optimal (constrained) warping path generally does not coincide with the optimal (unconstrained) warping path.
+                    Most common constrains are Sakoe-Chiba band and the Itakura parallelogram which require that the
+                    input sequences are of same length.
+                    However, the usage of global constraint can also introduce new problems. The reason for that is that
+                    the optimal warping path may traverse cells outside the specified constraint region.
+                    In other words, the resulting optimal (constrained) warping path generally does not coincide with
+                    the optimal (unconstrained) warping path.
                     <br><br>
                     <h4>Sakoe-Chiba Band</h4>
                     Sakoe-Chiba band was introduced by Sakoe and Chiba in [SC78] for speech community.
-                     It runs by the main diagonal having fixed window width.
+                    It runs by the main diagonal having fixed window width.
                     <img src="dtw.png" style="display: block;
-                    width = "300"; height = "200";margin: 0 auto;">
+                    width = " 300"; height = "200";margin: 0 auto;">
                     <h4>Itakura Parallelogram</h4>
-                        Itakura parallelogram was introduced by Itakura in [Ita75].
-                        The warping window constrains the slope of a
-                        warping path, i.e., the Itakura parallelogram
-                        consists of all cells that are traversed by some warping path having a slope. 
+                    Itakura parallelogram was introduced by Itakura in [Ita75].
+                    The warping window constrains the slope of a
+                    warping path, i.e., the Itakura parallelogram
+                    consists of all cells that are traversed by some warping path having a slope.
                     <br><br>
                     <h4>Slanted Band</h4>
                     Slanted band is a modification of
-                   Sakoe-Chiba band for the case where input sequences are of different length. 
-                   Instead of main diagonal here slanted diagonal is used.
-                    </section>
+                    Sakoe-Chiba band for the case where input sequences are of different length.
+                    Instead of main diagonal here slanted diagonal is used.
+                </section>
                 <section style="text-align: justify;">
                     <h3>Applications</h3>
                     <br>
-    Recall that DTW was introduced to compare different
-    speech patterns in automatic speech recognition [SC71]. In other disciplines such as
-    data mining and information retrieval, DTW has been successfully applied
-    to automatically cope with time deformations and different speeds associated with time-dependent data. 
-    
-     Some of the applications are as follows: bioinformatics [AC01], 
-     entertainment [ZS03], finance, medicine [CPB+98] and robotics [SOC99].
+                    Recall that DTW was introduced to compare different
+                    speech patterns in automatic speech recognition [SC71]. In other disciplines such as
+                    data mining and information retrieval, DTW has been successfully applied
+                    to automatically cope with time deformations and different speeds associated with time-dependent
+                    data.
+
+                    Some of the applications are as follows: bioinformatics [AC01],
+                    entertainment [ZS03], finance, medicine [CPB+98] and robotics [SOC99].
                 </section>
                 <section style="text-align: justify;">
                     <h3>References</h3>
-[AC01] John Aach and George M. Church. Aligning gene expression time
-series with time warping algorithms. Bioinformatics, 17(6):495-508,
-2001.
-<br><br>
-[CPB+98] E. G. Caiani, A. Porta, G. Baselli, M. Turiel, S. Muzzupappa,
-F. Pieruzzi, C. Crema, A. Malliani, and S. Cerutti. Warped-average
-template technique to track on a cycle-by-cycle basis the cardiac ll-
-ing phases on left ventricular volume. In Computers in Cardiology
-1998. Vol. 25 (Cat. No.98CH36292), pages 73-76, Sep 1998.
-<br><br>
-[Ita75] F. Itakura. Minimum prediction residual principle applied to speech
-recognition. IEEE Transactions on Acoustics, Speech, and Signal
-Processing, 23(1):67-72, Feb 1975.
-<br><br>
-[SC71] Hiroaki Sakoe and Seibi Chiba. A dynamic programming approach
-to continuous speech recognition. In Proceedings of the Seventh In-
-ternational Congress on Acoustics, Budapest, volume 3, pages 65-69,
-Budapest, 1971. 
-<br><br>
-[SC78] Hiroaki Sakoe and Seibi Chiba. Dynamic programming algorithm
-optimization for spoken word recognition. IEEE Transactions on
-Acoustics, Speech, and Signal Processing, (1):43-49, 1978.
-<br><br>
-[SOC99] Matthew D. Schmill, Tim Oates, and Paul R. Cohen. Learned mod-
-els for continuous planning. In In Proceedings of Uncertainty 99:
-The Seventh International Workshop on Artifcial Intelligence and
-Statistics, pages 278{282. Morgan Kaufmann Publishers, Inc, 1999.
-<br><br>
-[ZS03] Yunyue Zhu and Dennis Shasha. Warping indexes with envelope
-transforms for query by humming. In Proceedings of the 2003 ACM
-SIGMOD International Conference on Management of Data, SIG-
-MOD '03, pages 181-192, New York, NY, USA, 2003. ACM.
+                    [AC01] John Aach and George M. Church. Aligning gene expression time
+                    series with time warping algorithms. Bioinformatics, 17(6):495-508,
+                    2001.
+                    <br><br>
+                    [CPB+98] E. G. Caiani, A. Porta, G. Baselli, M. Turiel, S. Muzzupappa,
+                    F. Pieruzzi, C. Crema, A. Malliani, and S. Cerutti. Warped-average
+                    template technique to track on a cycle-by-cycle basis the cardiac ll-
+                    ing phases on left ventricular volume. In Computers in Cardiology
+                    1998. Vol. 25 (Cat. No.98CH36292), pages 73-76, Sep 1998.
+                    <br><br>
+                    [Ita75] F. Itakura. Minimum prediction residual principle applied to speech
+                    recognition. IEEE Transactions on Acoustics, Speech, and Signal
+                    Processing, 23(1):67-72, Feb 1975.
+                    <br><br>
+                    [SC71] Hiroaki Sakoe and Seibi Chiba. A dynamic programming approach
+                    to continuous speech recognition. In Proceedings of the Seventh In-
+                    ternational Congress on Acoustics, Budapest, volume 3, pages 65-69,
+                    Budapest, 1971.
+                    <br><br>
+                    [SC78] Hiroaki Sakoe and Seibi Chiba. Dynamic programming algorithm
+                    optimization for spoken word recognition. IEEE Transactions on
+                    Acoustics, Speech, and Signal Processing, (1):43-49, 1978.
+                    <br><br>
+                    [SOC99] Matthew D. Schmill, Tim Oates, and Paul R. Cohen. Learned mod-
+                    els for continuous planning. In In Proceedings of Uncertainty 99:
+                    The Seventh International Workshop on Artifcial Intelligence and
+                    Statistics, pages 278{282. Morgan Kaufmann Publishers, Inc, 1999.
+                    <br><br>
+                    [ZS03] Yunyue Zhu and Dennis Shasha. Warping indexes with envelope
+                    transforms for query by humming. In Proceedings of the 2003 ACM
+                    SIGMOD International Conference on Management of Data, SIG-
+                    MOD '03, pages 181-192, New York, NY, USA, 2003. ACM.
                 </section>
             </div>
 
