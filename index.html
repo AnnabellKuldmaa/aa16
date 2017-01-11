@@ -160,9 +160,11 @@
         <div class="tab-pane fade in active" id="home" role="tabpanel">
             <div class="col-sm-12">
                 <h1>Dynamic Time Warping</h1>
+
                 <p>
-                 Welcome to web application for visualizing the dynamic time warping. The construction of the warping matrix and search for the optimal warping path are dynamic and interactive. 
-                Select parameters and start visualizing! Learning DTW has never been easier and more fun!
+                    Welcome to web application for visualizing the dynamic time warping. The construction of the warping
+                    matrix and search for the optimal warping path are dynamic and interactive.
+                    Select parameters and start visualizing! Learning DTW has never been easier and more fun!
                 </p>
                 <hr>
             </div>
@@ -208,7 +210,7 @@
                                     <span id="myValue3"></span>
                                 </span>
                                 <input style="width:50%;" type="range" id="myRange3"
-                                       name="myRange3" min="0" max="10" value="1"></div>
+                                       name="myRange3" min="0" max="100" value="0"></div>
 
                         </div>
 
@@ -224,7 +226,7 @@
                                     <span id="myValue"></span>
                                 </span>
                                 <input type="range" id="myRange"
-                                       name="myRange" min="3" max="80" value="10" step="1">
+                                       name="myRange" min="10" max="80" value="10" step="1">
                             </div>
                             <div class="col-sm-4">
                                 <span style="position:absolute; color:grey;">
@@ -232,17 +234,9 @@
                                 </span>
 
                                 <input type="range" id="myRange2"
-                                       name="myRange2" min="3" max="80" value="10" step="1">
+                                       name="myRange2" min="10" max="80" value="10" step="1">
                             </div>
                         </div>
-                        <!-- <div class="row text-left">
-                             <div class="col-sm-3"></div>
-                             <div class="col-sm-3">
-                                 <button type="button" class="btn btn-default" id="generate"
-                                         style="padding:5px; margin-top:10px;">Generate data
-                                 </button>
-                             </div>
-                         </div>-->
                     </fieldset>
                     <br>
 
@@ -274,12 +268,12 @@
 
             </div>
 
-            <div class="container">
-                <div id="sequences" class="col-sm-10">
+            <div class="col-sm-12" style="margin: auto;">
+                <div id="sequences" class="col-sm-12">
                 </div>
-                <div class="col-sm-10" id="view">
+                <div class="col-sm-12" id="view">
                 </div>
-                <div class="col-sm-10">
+                <div class="col-sm-12">
                     <p id="calc_formula">Siia tuleb formula</p>
                 </div>
             </div>
@@ -306,10 +300,12 @@
                 <section style="text-align: justify;">
                     <h3>Algorithm</h3>
                     <br>
-                        DTW algorithm calculates an optimal match between two sequences having time complexity O(mn).
-                        The original version of the algorithm uses Euclidean distance, but other metrics can be applied.
-                        In particular, most important of other metrics are Canberra and Minkowski distances, and of course the absolute difference.
-                        The algorithm for calculating DTW distance between given two sequences A and B is presented as Algorithm 1.
+                    DTW algorithm calculates an optimal match between two sequences having time complexity O(mn).
+                    The original version of the algorithm uses Euclidean distance, but other metrics can be applied.
+                    In particular, most important of other metrics are Canberra and Minkowski distances, and of course
+                    the absolute difference.
+                    The algorithm for calculating DTW distance between given two sequences A and B is presented as
+                    Algorithm 1.
                     <br><br>
                     <img src="dtw.png" style="display: block;
     margin: 0 auto;">
@@ -384,11 +380,11 @@
 
     myValue3.parentElement.style.left = px3 + 'px';
     myValue3.parentElement.style.top = myRange3.offsetHeight + 'px';
-    myValue3.innerHTML = "w=" + myRange3.value;
+    myValue3.innerHTML = "w=" + myRange3.value + "%";
 
     myRange3.oninput = function () {
         let px3 = ((myRange3.valueAsNumber - parseInt(myRange3.min)) * off3) - (myValue3.offsetWidth / 2);
-        myValue3.innerHTML = "w=" + myRange3.value;
+        myValue3.innerHTML = "w=" + myRange3.value + "%";
         myValue3.parentElement.style.left = px3 + 'px';
     };
 </script>
@@ -414,7 +410,6 @@
         // read the form data
         var dist = document.getElementById('dist').value;
         var window = document.getElementById('constraint').value;
-        var w = document.getElementById('myRange3').value;
         var seq1 = document.getElementById('data_n').value;
         var seq2 = document.getElementById('data_m').value;
 
@@ -429,24 +424,49 @@
         else {
             seq1 = seq1.split(",").map(Number); //columns
             seq2 = seq2.split(",").map(Number); //rows
+            var n = seq1.length;
+            var m = seq2.length;
 
         }
-        // show sequence values
-        document.getElementById('sequences').innerHTML = "<table class='table table-bordered'><tr style='color:blue;'><td>Sequence 1</td><td><span id='seq1'></span></td></tr> <tr style='color:green;'><td>Sequence 2</td><td><span id='seq2'></span></td></tr> </table>";
-        document.getElementById('seq1').innerHTML = seq1;
-        document.getElementById('seq2').innerHTML = seq2;
+        var w = document.getElementById('myRange3').value;
+        w = Math.ceil(w / 100 * Math.max(n, m));
 
-        // scroll to view part
-        $('html, body').animate({
-            scrollTop: $("#view").offset().top
-        }, 1000);
-        // create the visual
-        var d = dynamicTimeWarping(seq2, seq1, dist, window, w);
-        //var d = dynamicTimeWarping(seq2, seq1, dist);
+        // if contsraint is slanted band, then upper has to be bigger
+        if (window == 3 && n < m) {
+            // excange seq1 and seq2
+            var tmp = seq1;
+            seq1 = seq2;
+            seq2 = tmp;
+        }
+        // Itakura, Sakoe chiba assusmes m=n
+        if (window == 1 && n != m) {
+            //Sakoe shiba
+            alert("Sequences are assumed to be equal lengths for Sakoe-Chiba band");
 
-        var path = warpingPath(d.data);
 
-        d3.warping.matrix(seq1, seq2, d.data, path); // columns, rows, cost matrix
+        } else if (window == 2 && n != m) {
+            //Itakura
+            alert("Sequences are assumed to be equal lengths for Itakura constraint");
+        } else {
+            // show sequence values
+            document.getElementById('sequences').innerHTML = "<table class='table table-bordered table-responsive'><tr style='color:blue; font-size: 10pt; text-align:left;'><td style='width: 90px;'>Sequence 1</td><td><span id='seq1' style ='word-break:break-all;'></span></td></tr> <tr style='color:green;font-size: 10pt; text-align:left;'><td style='width: 90px;'>Sequence 2</td><td><span id='seq2' style='word-break:break-all;'></span></td></tr> </table>";
+            document.getElementById('seq1').innerHTML = seq1.join(", ");
+            document.getElementById('seq2').innerHTML = seq2.join(", ");
+
+            // scroll to view part
+            $('html, body').animate({
+                scrollTop: $("#view").offset().top
+            }, 1000);
+            // create the visual
+            var d = dynamicTimeWarping(seq2, seq1, dist, window, w);
+            //var d = dynamicTimeWarping(seq2, seq1, dist);
+
+            var path = warpingPath(d.data);
+            console.log(path);
+
+            d3.warping.matrix(seq1, seq2, d.data, path); // columns, rows, cost matrix
+        }
+
 
     }
     ;
