@@ -163,14 +163,6 @@
 
                 <p>Siia tuleb sissejuhatav kirjeldus</p>
 
-                <p>Let's consider
-                    <math>
-                        <mi>a</mi>
-                        <mo>≠</mo>
-                        <mn>0</mn>
-                    </math>
-                    .
-                </p>
                 <hr>
             </div>
 
@@ -296,7 +288,26 @@
 
 
         <div class="tab-pane fade" id="about" role="tabpanel">
-            Siia vahele tuleb about text
+            <div class="container" style="width: 60%;">
+                <section style="text-align: justify;">
+                    <h3>Introduction</h3>
+                    <br>
+                    The task of the Dynamic Time Warping (DTW) algorithm is to measure
+                    the similarity between two
+                    sequences. DTW algorithm was introduced in \cite{Sakoe:1990:DPA:108235.108244} for speech
+                    recognition
+                    and since then has been applied to different problems in various fields.
+
+                    The algorithm is is one of the
+                    most important dynamic programming algorithms and it is crucial to understand its steps.
+                    <br><br>
+                    <img src="idea.png" width="400"
+                         height="200" style="display: block;
+    margin: 0 auto;">
+                </section>
+
+
+            </div>
 
         </div>
 
@@ -421,7 +432,7 @@
             scrollTop: $("#view").offset().top
         }, 1000);
         // create the visual
-        var d = dynamicTimeWarping(seq2, seq1, dist,window, w);
+        var d = dynamicTimeWarping(seq2, seq1, dist, window, w);
         //var d = dynamicTimeWarping(seq2, seq1, dist);
 
         var path = warpingPath(d.data);
