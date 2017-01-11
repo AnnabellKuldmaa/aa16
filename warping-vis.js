@@ -152,32 +152,34 @@ if (!d3) {
                     return d.y;
                 })
                 .attr("width", box_w)
-                .attr("height", box_w)
+                .attr("height", box_w);
+
+            col.attr('pointer-events', 'none')
                 .on('mouseover', function (d) {
-                        //var neigh = d3.selectAll("rect");
-                        //console.log(neigh);
+                    //var neigh = d3.selectAll("rect");
+                    //console.log(neigh);
 
-                        var neigh = d3.selectAll(".cell").filter(function (c) {
-                            return c.x == d.x - box_w && c.y == d.y - box_w || c.x == d.x - box_w && c.y == d.y || c.x == d.x && c.y == d.y - box_w;
+                    var neigh = d3.selectAll(".cell").filter(function (c) {
+                        return c.x == d.x - box_w && c.y == d.y - box_w || c.x == d.x - box_w && c.y == d.y || c.x == d.x && c.y == d.y - box_w;
+                    });
+                    if (neigh[0].length > 0) {
+                        neigh[0].map(function (d) {
+                            d3.select(d).style('fill', '#FFF');
                         });
-                        if (neigh[0].length > 0) {
-                            neigh[0].map(function (d) {
-                                d3.select(d).style('fill', '#FFF');
-                            });
-                        }
-
-                        d3.select(this)
-                            .style('fill', '#FFF');
-
-                        div2.transition()
-                            .duration(200)
-                            .style("opacity", .9);
-                        div2.html("<math><mi>a</mi><mo>≠</mo><mn>0</mn></math>")
-
-                            .style("left", (d3.event.pageX) + "px")
-                            .style("top", (d3.event.pageY - 50) + "px");
-
                     }
+
+                    d3.select(this)
+                        .style('fill', '#FFF');
+
+                    div2.transition()
+                        .duration(200)
+                        .style("opacity", .9);
+                    div2.html("<math><mi>a</mi><mo>≠</mo><mn>0</mn></math>")
+
+                        .style("left", (d3.event.pageX) + "px")
+                        .style("top", (d3.event.pageY - 50) + "px");
+
+                }
                 )
                 .on('mouseout', function (d) {
                     var neigh = d3.selectAll(".cell").filter(function (c) {
@@ -203,6 +205,7 @@ if (!d3) {
                 })
                 .style("stroke", '#555')
                 .style('fill', '#FFF');
+
 
             var text = row.selectAll(".label")
                 .data(function (d) {
@@ -476,11 +479,6 @@ if (!d3) {
                 };
             }
 
-// .attr({"d": pathline(path), "stroke-dasharray": "385 385", "stroke-dashoffset": 385 })
-//.transition()
-// .duration(1500)
-//  .attr("stroke-dashoffset", 0)
-
 
 // Create the alignment line charts
             function subtractArrays(ar1, ar2) {
@@ -556,7 +554,6 @@ if (!d3) {
                     .attr("d", function (d) {
                         return alignment_line(dat)
                     })
-                    //.attr("transform", "translate(0,0)")
                     .style("stroke-width", 1)
                     .style("stroke", "grey")
                     .style("fill", "none");
@@ -592,33 +589,36 @@ if (!d3) {
                     .style("stroke-width", 1)
                     .style("fill", "none")
                     .style("stroke", function () {
-                        return c[0] == c[1] ? "grey" : "red";
+                        //return c[0] == c[1] ? "grey" : "red";
+                        return i > 0 && ((c[0] == tmp[i - 1][0]) || (c[1] == tmp[i - 1][1])) ? "red" : "grey";
                     })
                     .style("display", "none");
                 test.transition().delay(function () {
-                    return (n < 20 && m < 20) ? cols.length * 100 + 10 + i*6000/tmp.length+1 : cols.length * 5 + 10 + i*10000/tmp.length+1;
+                    return (n < 20 && m < 20) ? cols.length * 100 + 10 + i * 6000 / tmp.length : cols.length * 5 + 10 + i * 10000 / tmp.length;
                 }).style("display", "initial");
 
             }
             ;
-            //d3.selectAll(".line_after").transition().delay(function (d,i) {
-            //        return (n < 20 && m < 20) ? cols.length * 100 + 10 + 6000+i : cols.length * 5 + 10 + 10000;
-            //    }).style("display", "initial");
+
             d3.selectAll(".line_before").transition().style("stroke", "none").delay(function () {
-                    return (n < 20 && m < 20) ? cols.length * 100 + 10 : cols.length * 5 + 10;
-                });
+                return (n < 20 && m < 20) ? cols.length * 100 + 10 : cols.length * 5 + 10;
+            });
+            col.transition().delay(function () {
+                return (n < 20 && m < 20) ? cols.length * 100 + 10 : cols.length * 5 + 10;
+            }).attr('pointer-events', '');
 
 
             var dims_mat = d3.select(".matrix").node().getBBox();
-            var dims_line = d3.select(".linedata").node().getBBox()
+            var dims_line = d3.select(".linedata").node().getBBox();
 
 
 //d3.select(".linedata").attr("x", 0);
-            d3.select(".linedata").attr("transform", "translate(" + (-dims_line.x + dims_line.width / 2 + 50) + "," + (100 + box_w / 2) + ")")
+            d3.select(".linedata").attr("transform", "translate(" + (-dims_line.x + dims_line.width / 2 + 50) + "," + (100 + box_w / 2) + ")");
 //set the width
 //d3.select("svg").attr("width", (-dims_line.x + dims_mat.width + dims_line.width + 250));
             matrix.attr("transform", "translate(" + (-dims_line.x + dims_line.width + 10) + ",0)");
             d3.select("svg").attr("width", (-dims_line.x + dims_mat.width + dims_line.width + 250));
+            d3.select("svg").attr("height", Math.max(dims_line.height, dims_mat.height) + 100);
 
 
         }
