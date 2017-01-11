@@ -26,7 +26,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
             row.push({value: 0, x: (startX + s * step), y: (startY + i * step)});
         d.push(row);
     }
-    if (!(window == 3)){
+    if (!(window == 3)) {
         if (metric == 0)
             d[0][0].value = Math.abs(A[0] - B[0]);
         else if (metric == 1)
@@ -71,7 +71,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     else if (window == 2) {
         for (var r = 0; r < m; r++) {
             for (var t = 0; t < n; t++) {
-                if (!(itakura(r+1, t+1, m, n)))
+                if (!(itakura(r + 1, t + 1, m, n)))
                     d[r][t].value = Infinity;
             }
         }
@@ -81,13 +81,13 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
         // all values to Infinity
         for (var r = 0; r < m; r++) {
             for (var t = 0; t < n; t++)
-                    d[r][t].value = Infinity;
-            }
+                d[r][t].value = Infinity;
+        }
         var slant = n / m;
-        for (var r = 0; r < m ; r++) {
-            var slant_r = Math.ceil( r * slant);
+        for (var r = 0; r < m; r++) {
+            var slant_r = Math.ceil(r * slant);
             for (var t = Math.max(slant_r - parseInt(window_param), 0); t < Math.min(n, slant_r + parseInt(window_param) + 1); t++) {
-            	if (r ==  0 && t == 0){
+                if (r == 0 && t == 0) {
                     if (metric == 0)
                         d[0][0].value = Math.abs(A[0] - B[0]);
                     else if (metric == 1)
@@ -96,29 +96,29 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                         d[0][0].value = Math.round(Math.abs(A[0] - B[0]) / (Math.abs(A[0]) + Math.abs(B[0])), 2);
                     else if (metric == 3)
                         d[0][0].value = Math.pow(Math.abs(A[0] - B[0]), 3);
-            	}
-            	else if (r == 0){
-            		//console.log(r,t)
-	                if (metric == 0)
-	                    d[0][t].value = Math.abs(A[0] - B[t]) + d[0][t - 1].value;
-	                else if (metric == 1)
-	                    d[0][t].value = Math.pow(A[0] - B[t], 2) + d[0][t - 1].value;
-	                else if (metric == 2)
-	                    d[0][t].value = Math.round(Math.abs(A[0] - B[t]) / (Math.abs(A[0]) + Math.abs(B[t])), 2) + d[0][t - 1].value;
-	                else if (metric == 3)
-	                    d[0][t].value = Math.pow(Math.abs(A[0] - B[t]), 3) + d[0][t - 1].value;
-	            	}
-            	else if (t == 0){
-            		console.log(r,t)
+                }
+                else if (r == 0) {
+                    //console.log(r,t)
                     if (metric == 0)
-                        d[r][0].value = Math.abs(A[r] - B[0]) + d[r-1][0].value;
+                        d[0][t].value = Math.abs(A[0] - B[t]) + d[0][t - 1].value;
                     else if (metric == 1)
-                        d[r][0].value = Math.pow(A[r] - B[0], 2) + d[r-1][0].value;
+                        d[0][t].value = Math.pow(A[0] - B[t], 2) + d[0][t - 1].value;
                     else if (metric == 2)
-                        d[r][0].value = Math.round(Math.abs(A[r] - B[0]) / (Math.abs(A[r]) + Math.abs(B[0])), 2) + d[r-1][0].value;
+                        d[0][t].value = Math.round(Math.abs(A[0] - B[t]) / (Math.abs(A[0]) + Math.abs(B[t])), 2) + d[0][t - 1].value;
                     else if (metric == 3)
-                        d[r][0].value = Math.pow(Math.abs(A[r] - B[0]), 3) + d[r-1][0].value;
-                	}
+                        d[0][t].value = Math.pow(Math.abs(A[0] - B[t]), 3) + d[0][t - 1].value;
+                }
+                else if (t == 0) {
+                    console.log(r, t)
+                    if (metric == 0)
+                        d[r][0].value = Math.abs(A[r] - B[0]) + d[r - 1][0].value;
+                    else if (metric == 1)
+                        d[r][0].value = Math.pow(A[r] - B[0], 2) + d[r - 1][0].value;
+                    else if (metric == 2)
+                        d[r][0].value = Math.round(Math.abs(A[r] - B[0]) / (Math.abs(A[r]) + Math.abs(B[0])), 2) + d[r - 1][0].value;
+                    else if (metric == 3)
+                        d[r][0].value = Math.pow(Math.abs(A[r] - B[0]), 3) + d[r - 1][0].value;
+                }
             }
         }
     }
@@ -132,7 +132,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                 else if (metric == 1)
                     dist = Math.pow(A[l] - B[p], 2);
                 else if (metric == 2)
-                    dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])),2);
+                    dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])), 2);
                 else if (metric == 3)
                     dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                 // min(diagonal, up, left)
@@ -148,7 +148,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                 else if (metric == 1)
                     dist = Math.pow(A[l] - B[p], 2);
                 else if (metric == 2)
-                    dist = Math.round(Math.abs(A[l] - B[p]) /(Math.abs(A[l]) + Math.abs(B[p])),2);
+                    dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])), 2);
                 else if (metric == 3)
                     dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                 // min(diagonal, up, left)
@@ -159,13 +159,13 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     else if (window == 2) {
         for (var l = 1; l < m; l++) {
             for (var p = 1; p < n; p++) {
-                if (itakura(l+1, p+1, m, n)) {
+                if (itakura(l + 1, p + 1, m, n)) {
                     if (metric == 0)
                         dist = Math.abs(A[l] - B[p]);
                     else if (metric == 1)
                         dist = Math.pow(A[l] - B[p], 2);
                     else if (metric == 2)
-                        dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])),2);
+                        dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])), 2);
                     else if (metric == 3)
                         dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                     d[l][p].value = dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
@@ -175,19 +175,19 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     }
     else if (window == 3) {
         var slant = n / m;
-        for (var l = 1; l < m ; l++) {
-            var slant_l = Math.ceil( l * slant);
+        for (var l = 1; l < m; l++) {
+            var slant_l = Math.ceil(l * slant);
             for (var p = Math.max(slant_l - parseInt(window_param), 1); p < Math.min(n, slant_l + parseInt(window_param) + 1); p++) {
                 if (metric == 0)
                     dist = Math.abs(A[l] - B[p]);
                 else if (metric == 1)
                     dist = Math.pow(A[l] - B[p], 2);
                 else if (metric == 2)
-                    dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])),2);
+                    dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])), 2);
                 else if (metric == 3)
                     dist = Math.pow(Math.abs(A[l] - B[p]), 3);
-                d[l][p].value =dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
-                
+                d[l][p].value = dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
+
             }
         }
     }
@@ -209,8 +209,8 @@ warpingPath = function (d) {
     var path = Array();
     console.log(d);
     //path.push([i,j]);
-    path.push([d[i][j].x + box_w, d[i][j].y + box_w]); // so that the line starts from the bottom corner
-    path.push([d[i][j].x, d[i][j].y]);
+    //path.push([d[i][j].x + box_w, d[i][j].y + box_w]); // so that the line starts from the bottom corner
+    path.push([d[i][j].x + box_w / 2, d[i][j].y + box_w / 2]);
     while (!(i == 0 && j == 0)) {
         if (i == 0)
             j = j - 1;
@@ -228,7 +228,7 @@ warpingPath = function (d) {
         }
 
         //path.push([j, i]);
-        path.push([d[i][j].x, d[i][j].y]);
+        path.push([d[i][j].x + box_w / 2, d[i][j].y + box_w / 2]);
     }
     //path.push([0,0]);
     //path.push([d[0][0].x, d[0][0].y]);
