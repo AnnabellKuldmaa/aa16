@@ -316,12 +316,12 @@
                     In order to speed up the DTW calculation and prevent pathological warpings, different constraints 
                     for warping window have been introduced. 
                     A global constraint constraints the indices of the warping path.
-                     Most common constrains are Sakoe Chiba band and the Itakura parallelogram which require that the input sequences are of same length.
+                     Most common constrains are Sakoe-Chiba band and the Itakura parallelogram which require that the input sequences are of same length.
                     However, the usage of global constraint can also introduce new problems. The reason for that is that the optimal warping path may traverse cells outside the specified constraint region.
                      In other words, the resulting optimal (constrained) warping path generally does not coincide with the optimal (unconstrained) warping path.
                     <br><br>
-                    <h4>Sakoe Chiba Band</h4>
-                    Sakoe Chiba band was introduced by Sakoe and Chiba in [SC78] for speech community.
+                    <h4>Sakoe-Chiba Band</h4>
+                    Sakoe-Chiba band was introduced by Sakoe and Chiba in [SC78] for speech community.
                      It runs by the main diagonal having fixed window width.
                     <img src="dtw.png" style="display: block;
                     width = "300"; height = "200";margin: 0 auto;">
