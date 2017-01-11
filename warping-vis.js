@@ -111,7 +111,7 @@ if (!d3) {
                 return d.value;
             });
             var max = d3.max(values, function (d) {
-                return d.value==Infinity ? 0 : d.value;
+                return d.value == Infinity ? 0 : d.value;
             });
             var turnaround = d3.scale.linear().domain([0, 1]).range([1, 0]);
             /*var heatmapColor = d3.scale.linear()
@@ -186,7 +186,7 @@ if (!d3) {
                     if (neigh[0].length > 0) {
                         neigh[0].map(function (d) {
                             d3.select(d).style('fill', function (d) {
-                                return  d.value==Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
+                                return d.value == Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
                                 //return heatmapColor(d.value);
                             })
                         });
@@ -194,7 +194,7 @@ if (!d3) {
 
                     d3.select(this)
                         .style('fill', function (d) {
-                            return d.value==Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
+                            return d.value == Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
                             //return heatmapColor(d.value);
                         });
                     div2.transition()
@@ -228,7 +228,7 @@ if (!d3) {
                         return (n < 20 && m < 20) ? i * 100 : i * 5;
                     })
                     .style("fill", function (d) {
-                        return d.value==Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
+                        return d.value == Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
                         //return heatmapColor((d.value - min)/(max-min));
                     });
 
@@ -241,7 +241,7 @@ if (!d3) {
                     .attr("font-size", "8px")
                     .attr("font-weight", "normal")
                     .text(function (d) {
-                        return (n < 26 && m < 26) ? (d.value==Infinity ? "Inf" : d.value) : "";
+                        return (n < 26 && m < 26) ? (d.value == Infinity ? "Inf" : d.value) : "";
                     });
             }
             ;
@@ -381,31 +381,31 @@ if (!d3) {
                 });
 
             /*line2.selectAll("circle.line2_dot")
-                .transition()
-                .delay(function (d, i) {
-                    return (n < 20 && m < 20) ? cols.length * 100 / (seq2.length) * i : cols.length * 5 / (seq2.length) * i;
-                })
-                .ease("linear")
-                .attr("r", 2.5)
-                .style("fill", "green")
-                .attr("cy", function (d, i) {
-                    return x2(i);
-                })
-                .attr("cx", function (d) {
-                    return y2(d);
-                });*/
+             .transition()
+             .delay(function (d, i) {
+             return (n < 20 && m < 20) ? cols.length * 100 / (seq2.length) * i : cols.length * 5 / (seq2.length) * i;
+             })
+             .ease("linear")
+             .attr("r", 2.5)
+             .style("fill", "green")
+             .attr("cy", function (d, i) {
+             return x2(i);
+             })
+             .attr("cx", function (d) {
+             return y2(d);
+             });*/
 
             /*var totalLength = path2.node().getTotalLength();
 
-            path2
-                .attr("stroke-dasharray", totalLength + " " + totalLength)
-                .attr("stroke-dashoffset", totalLength)
-                .transition()
-                .duration(function () {
-                    return (n < 20 && m < 20) ? cols.length * 100 : cols.length * 5;
-                })
-                .ease("linear")
-                .attr("stroke-dashoffset", 0);*/
+             path2
+             .attr("stroke-dasharray", totalLength + " " + totalLength)
+             .attr("stroke-dashoffset", totalLength)
+             .transition()
+             .duration(function () {
+             return (n < 20 && m < 20) ? cols.length * 100 : cols.length * 5;
+             })
+             .ease("linear")
+             .attr("stroke-dashoffset", 0);*/
 
             line2.attr("transform", "translate(" + 45 + "," + (100 + box_w / 2) + ")");
 
@@ -435,9 +435,11 @@ if (!d3) {
                 .attr("stroke-dashoffset", totalLength)
                 .transition()
                 .delay(function () {
-                    return (n < 20 && m < 20) ? cols.length * 100 + 10 : cols.length * 6 + 10;
+                    return (n < 20 && m < 20) ? cols.length * 100 + 10 : cols.length * 5 + 10;
                 })
-                .duration(6000)
+                .duration(function () {
+                    return (n < 20 && m < 20) ? 6000 : 10000;
+                })
                 .ease("linear")
                 .attr("stroke-dashoffset", 0);
 
@@ -448,9 +450,11 @@ if (!d3) {
 
             arrow.transition()
                 .delay(function () {
-                    return (n < 20 && m < 20) ? cols.length * 100 + 10 : cols.length * 6 + 10;
+                    return (n < 20 && m < 20) ? cols.length * 100 + 10 : cols.length * 5 + 10;
                 })
-                .duration(6000)
+                .duration(function () {
+                    return (n < 20 && m < 20) ? 6000 : 10000;
+                })
                 .attr("stroke", "black")
                 .attr("fill", "black")
                 .ease("linear")
@@ -487,13 +491,14 @@ if (!d3) {
             };
 
             var min_distance = Math.min(subtractArrays(seq1, seq2));
-            var sep = min_distance < 30 ? 50 : 20;
+            var sep = min_distance < 30 ? 60 : 40;
             var n_seq2 = seq2.map(function (d) {
                 return (d + sep);
             });
             var align_data = [{id: "seq1", values: seq1}, {
                 id: "seq2", values: n_seq2
             }];
+
             var z = d3.scale.ordinal().range(["blue", "green"]);
 
             z.domain(align_data.map(function (c) {
@@ -537,16 +542,17 @@ if (!d3) {
 
             var line_data = [];
             line_data = range(0, n).map(function (e, i, a) {
-                return [e, align_data[0].values[i]]
+                return [i, align_data[0].values[i]]
             });
             var line_data2 = [];
             line_data2 = range(0, m).map(function (e, i, a) {
-                return [e, align_data[1].values[i]]
+                return [i, align_data[1].values[i]]
             });
 
             for (var i = 0; i < Math.min(n, m); i++) {
                 var dat = [line_data[i], line_data2[i]];
                 chart.select(".linedata").append("path")
+                    .attr("class", "line_before")
                     .attr("d", function (d) {
                         return alignment_line(dat)
                     })
@@ -557,6 +563,51 @@ if (!d3) {
 
             }
             ;
+            var oldmax_x = Math.max.apply(Math, path.map(function (d) {
+                return d[0];
+            }));
+            var oldmax_y = Math.max.apply(Math, path.map(function (d) {
+                return d[1];
+            }));
+            var oldmin_x = Math.min.apply(Math, path.map(function (d) {
+                return d[0];
+            }));
+            var oldmin_y = Math.min.apply(Math, path.map(function (d) {
+                return d[1];
+            }));
+            // array of matches
+            var tmp = path.map(function (d) {
+                return [(((d[0] - oldmin_x) * ((n - 1) - 0)) / (oldmax_x - oldmin_x)) + 0, (((d[1] - oldmin_y) * ((m - 1) - 0)) / (oldmax_y - oldmin_y)) + 0]
+            });
+
+            for (var i = 0; i < tmp.length; i++) {
+                var c = tmp[i];
+                var dat = [line_data[c[0]], line_data2[c[1]]];
+
+                var test = chart.select(".linedata").append("path")
+                    .attr("class", "line_after")
+                    .attr("d", function () {
+                        return alignment_line(dat)
+                    })
+                    .style("stroke-width", 1)
+                    .style("fill", "none")
+                    .style("stroke", function () {
+                        return c[0] == c[1] ? "grey" : "red";
+                    })
+                    .style("display", "none");
+                test.transition().delay(function () {
+                    return (n < 20 && m < 20) ? cols.length * 100 + 10 + i*6000/tmp.length+1 : cols.length * 5 + 10 + i*10000/tmp.length+1;
+                }).style("display", "initial");
+
+            }
+            ;
+            //d3.selectAll(".line_after").transition().delay(function (d,i) {
+            //        return (n < 20 && m < 20) ? cols.length * 100 + 10 + 6000+i : cols.length * 5 + 10 + 10000;
+            //    }).style("display", "initial");
+            d3.selectAll(".line_before").transition().style("stroke", "none").delay(function () {
+                    return (n < 20 && m < 20) ? cols.length * 100 + 10 : cols.length * 5 + 10;
+                });
+
 
             var dims_mat = d3.select(".matrix").node().getBBox();
             var dims_line = d3.select(".linedata").node().getBBox()

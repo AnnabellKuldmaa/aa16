@@ -207,7 +207,7 @@ warpingPath = function (d) {
     var j = d[0].length - 1;//column
     var box_w = (d.length < 26 && d[0].length < 26) ? 25 : 10;
     var path = Array();
-    console.log(d);
+
     //path.push([i,j]);
     //path.push([d[i][j].x + box_w, d[i][j].y + box_w]); // so that the line starts from the bottom corner
     path.push([d[i][j].x + box_w / 2, d[i][j].y + box_w / 2]);
