@@ -462,7 +462,6 @@
             //var d = dynamicTimeWarping(seq2, seq1, dist);
 
             var path = warpingPath(d.data);
-            console.log(path);
 
             d3.warping.matrix(seq1, seq2, d.data, path); // columns, rows, cost matrix
         }
