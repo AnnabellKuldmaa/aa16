@@ -36,7 +36,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
             d[0][0].formula = 'd[0,0] = dist(0,0) = ' + d[0][0].value;
         }
         else if (metric == 2) {
-            d[0][0].value = Math.round(Math.abs(A[0] - B[0]) / (Math.abs(A[0]) + Math.abs(B[0])), 2);
+            d[0][0].value = +((Math.abs(A[0] - B[0]) / (Math.abs(A[0]) + Math.abs(B[0]))).toFixed(3));
             d[0][0].formula = 'd[0,0] = dist(0,0) = ' + d[0][0].value;
         }
         else if (metric == 3) {
@@ -53,7 +53,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                 d[j][0].formula = 'd['+j+',0] = dist('+j+',0)+d['+ (j-1) + ',0] = ' +  Math.pow(A[j] - B[0], 2) + '+' + d[j - 1][0].value + ' = ' + d[j][0].value;
             }
             else if (metric == 2) {
-                d[j][0].value = Math.round(Math.abs(A[j] - B[0]) / (Math.abs(A[j]) + Math.abs(B[0])), 2) + d[j - 1][0].value;
+                d[j][0].value = +((Math.abs(A[j] - B[0]) / (Math.abs(A[j]) + Math.abs(B[0]))).toFixed(3)) + d[j - 1][0].value;
                 d[j][0].formula = 'd['+j+',0] = dist('+j+',0)+d['+ (j-1) + ',0] = ' + Math.round(Math.abs(A[j] - B[0]) / (Math.abs(A[j]) + Math.abs(B[0])), 2) + '+' + d[j - 1][0].value + ' = ' + d[j][0].value;
             }
             else if (metric == 3) {
@@ -71,7 +71,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                 d[0][k].formula = 'd[0,'+k+'] = dist(0,'+k+')+d[0,'+(k-1) + '] = '+Math.pow(B[k] - A[0], 2)+ '+' + d[0][k - 1].value + ' = ' + d[0][k].value;
             }
             else if (metric == 2) {
-                d[0][k].value = Math.round(Math.abs(B[k] - A[0]) / (Math.abs(B[k]) + Math.abs(A[0])), 2) + d[0][k - 1].value;
+                d[0][k].value = +((Math.abs(B[k] - A[0]) / (Math.abs(B[k]) + Math.abs(A[0]))).toFixed(3)) + d[0][k - 1].value;
                 d[0][k].formula = 'd[0,'+k+'] = dist(0,'+k+')+d[0,'+(k-1) + '] = ' + Math.round(Math.abs(B[k] - A[0]) / (Math.abs(B[k]) + Math.abs(A[0])), 2)+ '+' + d[0][k - 1].value + ' = ' + d[0][k].value;
             }
             else if (metric == 3) {
@@ -127,7 +127,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                         d[0][0].formula = 'd[0,0] = dist(0,0) = ' + d[0][0].value;
                     }
                     else if (metric == 2) {
-                        d[0][0].value = Math.round(Math.abs(A[0] - B[0]) / (Math.abs(A[0]) + Math.abs(B[0])), 2);
+                        d[0][0].value = +((Math.abs(A[0] - B[0]) / (Math.abs(A[0]) + Math.abs(B[0]))).toFixed(3));
                         d[0][0].formula = 'd[0,0] = dist(0,0) = ' + d[0][0].value;
                     }
                     else if (metric == 3) {
@@ -146,7 +146,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                         d[0][t].formula = 'd[0,'+t+'] = dist(0,'+t+')+d[0,'+(t-1)+'] = ' + Math.pow(A[0] - B[t], 2) + '+' + d[0][t - 1].value + ' = ' + d[0][t].value;
                     }
                     else if (metric == 2) {
-                        d[0][t].value = Math.round(Math.abs(A[0] - B[t]) / (Math.abs(A[0]) + Math.abs(B[t])), 2) + d[0][t - 1].value;
+                        d[0][t].value = +((Math.abs(A[0] - B[t]) / (Math.abs(A[0]) + Math.abs(B[t]))).toFixed(3)) + d[0][t - 1].value;
                         d[0][t].formula = 'd[0,'+t+'] = dist(0,'+t+')+d[0,'+(t-1)+'] = ' + Math.round(Math.abs(A[0] - B[t]) / (Math.abs(A[0]) + Math.abs(B[t])), 2) + '+' + d[0][t - 1].value + ' = ' + d[0][t].value;
                     }
                     else if (metric == 3) {
@@ -166,7 +166,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
 
                     }
                     else if (metric == 2) {
-                        d[r][0].value = Math.round(Math.abs(A[r] - B[0]) / (Math.abs(A[r]) + Math.abs(B[0])), 2) + d[r - 1][0].value;
+                        d[r][0].value = +((Math.abs(A[r] - B[0]) / (Math.abs(A[r]) + Math.abs(B[0]))).toFixed(3)) + d[r - 1][0].value;
                         d[r][0].formula = 'd['+ r +',0] = dist('+r+',0)+d['+ (r-1) + ',0] = ' + Math.round(Math.abs(A[r] - B[0]) / (Math.abs(A[r]) + Math.abs(B[0])), 2) + '+' + d[r - 1][0].value + ' = ' + d[r][0].value;
 
                     }
@@ -189,7 +189,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                 else if (metric == 1)
                     dist = Math.pow(A[l] - B[p], 2);
                 else if (metric == 2)
-                    dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])), 2);
+                    dist = +((Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p]))).toFixed(3));
                 else if (metric == 3)
                     dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                 // min(diagonal, up, left)
@@ -207,7 +207,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                 else if (metric == 1)
                     dist = Math.pow(A[l] - B[p], 2);
                 else if (metric == 2)
-                    dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])), 2);
+                    dist = +((Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p]))).toFixed(3));
                 else if (metric == 3)
                     dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                 // min(diagonal, up, left)
@@ -226,7 +226,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                     else if (metric == 1)
                         dist = Math.pow(A[l] - B[p], 2);
                     else if (metric == 2)
-                        dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])), 2);
+                        dist = +((Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p]))).toFixed(3));
                     else if (metric == 3)
                         dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                     d[l][p].value = dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
@@ -246,7 +246,7 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                 else if (metric == 1)
                     dist = Math.pow(A[l] - B[p], 2);
                 else if (metric == 2)
-                    dist = Math.round(Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p])), 2);
+                    dist = +((Math.abs(A[l] - B[p]) / (Math.abs(A[l]) + Math.abs(B[p]))).toFixed(3));
                 else if (metric == 3)
                     dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                 d[l][p].value = dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
@@ -260,9 +260,10 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     // distance is d[m-1][n-1] for Euclidean, Canberra need to take root
     var distance = d[m - 1][n - 1].value;
     if (metric == 1)
-        distance = Math.round(Math.pow(distance, 1 / 2), 2);
+        distance = +(Math.pow(distance, 1 / 2).toFixed(2));
     else if (metric == 3)
-        distance = Math.round(Math.pow(distance, 1 / 3), 2);
+        distance = +(Math.pow(distance, 1 / 3).toFixed(2));
+    console.log(distance);
     return {"data": d, "distance": distance};
 };
 
@@ -282,13 +283,14 @@ warpingPath = function (d) {
         else if (j == 0)
             i = i - 1;
         else {
-            if (d[i - 1][j].value == Math.min(d[i - 1][j - 1].value, d[i - 1][j].value, d[i][j - 1].value))
+            if (d[i - 1][j-1].value == Math.min(d[i - 1][j - 1].value, d[i - 1][j].value, d[i][j - 1].value)){
                 i = i - 1;
+                j = j - 1;
+            }
             else if (d[i][j - 1].value == Math.min(d[i - 1][j - 1].value, d[i - 1][j].value, d[i][j - 1].value))
                 j = j - 1;
             else {
                 i = i - 1;
-                j = j - 1;
             }
         }
 
