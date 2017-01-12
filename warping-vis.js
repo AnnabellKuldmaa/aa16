@@ -154,58 +154,6 @@ if (!d3) {
                 .attr("width", box_w)
                 .attr("height", box_w);
 
-            col.attr('pointer-events', 'none')
-                .on('mouseover', function (d) {
-                    //var neigh = d3.selectAll("rect");
-                    //console.log(neigh);
-
-                    var neigh = d3.selectAll(".cell").filter(function (c) {
-                        return c.x == d.x - box_w && c.y == d.y - box_w || c.x == d.x - box_w && c.y == d.y || c.x == d.x && c.y == d.y - box_w;
-                    });
-                    if (neigh[0].length > 0) {
-                        neigh[0].map(function (d) {
-                            d3.select(d).style('fill', '#FFF');
-                        });
-                    }
-
-                    d3.select(this)
-                        .style('fill', '#FFF');
-
-                    div2.transition()
-                        .duration(200)
-                        .style("opacity", .9);
-                    div2.html("<math><mi>a</mi><mo>≠</mo><mn>0</mn></math>")
-
-                        .style("left", (d3.event.pageX) + "px")
-                        .style("top", (d3.event.pageY - 50) + "px");
-
-                }
-                )
-                .on('mouseout', function (d) {
-                    var neigh = d3.selectAll(".cell").filter(function (c) {
-                        return c.x == d.x - box_w && c.y == d.y - box_w || c.x == d.x - box_w && c.y == d.y || c.x == d.x && c.y == d.y - box_w;
-                    });
-                    if (neigh[0].length > 0) {
-                        neigh[0].map(function (d) {
-                            d3.select(d).style('fill', function (d) {
-                                return d.value == Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
-                                //return heatmapColor(d.value);
-                            })
-                        });
-                    }
-
-                    d3.select(this)
-                        .style('fill', function (d) {
-                            return d.value == Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
-                            //return heatmapColor(d.value);
-                        });
-                    div2.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                })
-                .style("stroke", '#555')
-                .style('fill', '#FFF');
-
 
             var text = row.selectAll(".label")
                 .data(function (d) {
@@ -246,9 +194,65 @@ if (!d3) {
                     .text(function (d) {
                         return (n < 26 && m < 26) ? (d.value == Infinity ? "Inf" : d.value) : "";
                     });
+
             }
             ;
 
+            col.attr('pointer-events', 'none')
+                .on('mouseover', function (d) {
+                        //var neigh = d3.selectAll("rect");
+                        //console.log(neigh);
+
+                        var neigh = d3.selectAll(".cell").filter(function (c) {
+                            return c.x == d.x - box_w && c.y == d.y - box_w || c.x == d.x - box_w && c.y == d.y || c.x == d.x && c.y == d.y - box_w;
+                        });
+
+                        if (neigh[0].length > 0) {
+                            neigh[0].map(function (d) {
+                                d3.select(d).style('fill', '#FFF');
+                            });
+                        }
+
+                        d3.select(this)
+                            .style('fill', '#F6DDCC');
+
+                        div2.transition()
+                            .duration(200)
+                            .style("opacity", .9);
+                        var info_text = d.formula;
+
+                        div2.html(info_text)
+                            .style("left", (d3.event.pageX + 20) + "px")
+                            .style("top", (d3.event.pageY-10) + "px");
+
+                    }
+                )
+                .on('mouseout', function (d) {
+                    var neigh = d3.selectAll(".cell").filter(function (c) {
+                        return c.x == d.x - box_w && c.y == d.y - box_w || c.x == d.x - box_w && c.y == d.y || c.x == d.x && c.y == d.y - box_w;
+                    });
+                    if (neigh[0].length > 0) {
+                        neigh[0].map(function (d) {
+                            d3.select(d).style('fill', function (d) {
+                                return d.value == Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
+                                //return heatmapColor(d.value);
+                            })
+                        });
+                    }
+
+                    d3.select(this)
+                        .style('fill', function (d) {
+                            return d.value == Infinity ? "lightgrey" : heatmapColor(turnaround((d.value - min) / (max - min)));
+                            //return heatmapColor(d.value);
+                        });
+
+
+                    div2.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                })
+                .style("stroke", '#555')
+                .style('fill', '#FFF');
 
             var ylabels = matrix.append("g")
                 .attr("class", "y axis")
@@ -547,19 +551,19 @@ if (!d3) {
                 return [i, align_data[1].values[i]]
             });
 
-            for (var i = 0; i < Math.min(n, m); i++) {
-                var dat = [line_data[i], line_data2[i]];
-                chart.select(".linedata").append("path")
-                    .attr("class", "line_before")
-                    .attr("d", function (d) {
-                        return alignment_line(dat)
-                    })
-                    .style("stroke-width", 1)
-                    .style("stroke", "grey")
-                    .style("fill", "none");
+            /*for (var i = 0; i < Math.min(n, m); i++) {
+             var dat = [line_data[i], line_data2[i]];
+             chart.select(".linedata").append("path")
+             .attr("class", "line_before")
+             .attr("d", function (d) {
+             return alignment_line(dat)
+             })
+             .style("stroke-width", 1)
+             .style("stroke", "grey")
+             .style("fill", "none");
 
-            }
-            ;
+             }
+             ;*/
             var oldmax_x = Math.max.apply(Math, path.map(function (d) {
                 return d[0];
             }));
@@ -600,12 +604,13 @@ if (!d3) {
             }
             ;
 
-            d3.selectAll(".line_before").transition().style("stroke", "none").delay(function () {
-                return (n < 20 && m < 20) ? cols.length * 100 + 10 : cols.length * 5 + 10;
-            });
-            col.transition().delay(function () {
-                return (n < 20 && m < 20) ? cols.length * 100 + 10 : cols.length * 5 + 10;
-            }).attr('pointer-events', '');
+            /*d3.selectAll(".line_before").transition().style("stroke", "none").delay(function () {
+             return (n < 20 && m < 20) ? cols.length * 100 + 10 : cols.length * 5 + 10;
+             });*/
+
+            col.transition().delay(function (d) {
+                return (n < 20 && m < 20) ? cols.length * 100 + 10 + 6000 : cols.length * 5 + 10 +10000;
+            }).attr('pointer-events', 'auto');
 
 
             var dims_mat = d3.select(".matrix").node().getBBox();

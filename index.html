@@ -13,9 +13,6 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.6.0/css/bootstrap-slider.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript"
-            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-    </script>
 
     <title>Dynamic Time Warping</title>
     <style>
@@ -70,7 +67,6 @@
         div.tooltip2 {
             position: absolute;
             text-align: center;
-            width: 60px;
             padding: 2px;
             font: 12px sans-serif;
             background: lightsteelblue;
@@ -148,7 +144,7 @@
             <ul class="nav navbar-nav" id="myNavbar">
                 <li class="active"><a href="#home" role="tab">Home</a></li>
                 <li><a href="#about" role="tab">About</a></li>
-                <li><a href="#contact" role="tab">Contact</a></li>
+                <li><a href="poster.pdf" role="tab" id="poster">Poster</a></li>
             </ul>
         </div>
     </div>
@@ -205,7 +201,12 @@
                         </div>
 
                         <div class="form-group form-group-sm row text-left">
-                            <label class="col-sm-3">Window parameter:</label>
+                            <div class="col-sm-3">
+                                <label>Window parameter:</label>
+
+                                <p class="text-muted" style="font-size:10px;">The distance that the path is allowed to
+                                    wander<br>(% of sequence length)</p>
+                            </div>
 
                             <div class="col-sm-5">
                                 <span style="position:absolute; color:grey;">
@@ -310,13 +311,13 @@
                     Algorithm 1.
                     <br><br>
                     <center>
-                    <img src="dtw.png" style="display: block;
-                    width = " 300"; height = "200";margin: 0 auto;">
-                     </center>
-                     An example of the cost matrix, warping path and alignment is as follows:
+                        <img src="dtw.png" style="display: block; margin: 0 auto;"
+                    width = "300"  height = "200">
+                    </center>
+                    An example of the cost matrix, warping path and alignment is as follows:
                     <center>
-                    <img src="about/noconstraints.png" style="display: block;
-                    width = " 300"; height = "200";margin: 0 auto;">
+                        <img src="about/noconstraints.png" style="display: block; margin: 0 auto;"
+                    width = " 300" height = "200">
                     </center>
                 </section>
                 <section style="text-align: justify;">
@@ -335,22 +336,25 @@
                     <h4>Sakoe-Chiba Band</h4>
                     Sakoe-Chiba band was introduced by Sakoe and Chiba in [SC78] for speech community.
                     It runs by the main diagonal having fixed window width.
-                    <center><img src="about/sakoe_chiba.png" align="middle" style="display: block;
-                    width = " 300"; height = "200" ; margin: 0 auto;"></center>
+                    <center><img src="about/sakoe_chiba.png" align="middle" style="display: block; margin: 0 auto;"
+                    width = "300" height = "200">
+                    </center>
                     <h4>Itakura Parallelogram</h4>
                     Itakura parallelogram was introduced by Itakura in [Ita75].
                     The warping window constrains the slope of a
                     warping path, i.e., the Itakura parallelogram
                     consists of all cells that are traversed by some warping path having a slope.
-                     <center><img src="about/itakura.png" style="display: block;
-                    width = " 300"; height = "200";margin: 0 auto;"></center>
+                    <center><img src="about/itakura.png" style="display: block; margin: 0 auto;"
+                    width = "300" height = "200">
+                    </center>
                     <br><br>
                     <h4>Slanted Band</h4>
                     Slanted band is a modification of
                     Sakoe-Chiba band for the case where input sequences are of different length.
                     Instead of main diagonal here slanted diagonal is used.
-                    <center><img src="about/slanted.png" style="display: block;
-                    width = " 300"; height = "200";margin: 0 auto;"></center>
+                    <center><img src="about/slanted.png" style="display: block; margin: 0 auto;"
+                    width = "300" height = "200">
+                    </center>
                 </section>
                 <section style="text-align: justify;">
                     <h3>Applications</h3>
@@ -403,15 +407,15 @@
 
         </div>
 
-        <div class="tab-pane fade" id="contact" role="tabpanel">...</div>
+        <div class="tab-pane fade" id="poster" role="tabpanel"><a href="poster.pdf">Poster</a></div>
 
     </div>
 </div>
 <br><br>
 <footer class="footer text-center">
-    <p>&copy; 2017 Annabell Kuldmaa & Liis Kolberg | Project in course "Advanced Algorithmics"</p>
+    <p>&copy; 2017 Annabell Kuldmaa & Liis Kolberg | Project in course "Advanced Algorithmics" | University of Tartu</p>
+    <p class="text-muted">Powered by <a href="https://d3js.org">D3.js</a></p>
 
-    <p>University of Tartu</p>
 </footer>
 
 
@@ -421,8 +425,6 @@
 <script src="https://d3js.org/d3-color.v1.min.js"></script>
 <script src="https://d3js.org/d3-format.v1.min.js"></script>
 <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
-<script src="https://d3js.org/d3-time.v1.min.js"></script>
-<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
 <script src="https://d3js.org/d3-scale.v1.min.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script type="text/javascript" src="warping-vis.js"></script>
@@ -478,8 +480,11 @@
 
 <script type="text/javascript">
     $('#myNavbar a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show')
+        if ($(this).attr('id') != "poster") {
+            e.preventDefault();
+            $(this).tab('show')
+        }
+
     })
 </script>
 <script type="text/javascript">

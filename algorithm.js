@@ -24,37 +24,61 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     for (var i = 0; i < m; i++) {
         var row = [];
         for (var s = 0; s < n; s++)
-            row.push({value: 0, x: (startX + s * step), y: (startY + i * step)});
+            row.push({value: 0, x: (startX + s * step), y: (startY + i * step), i: i, j: s, formula:""});
         d.push(row);
     }
     if (!(window == 3)) {
-        if (metric == 0)
+        if (metric == 0){
             d[0][0].value = Math.abs(A[0] - B[0]);
-        else if (metric == 1)
+            d[0][0].formula = 'd[0,0] = dist(0,0) = ' + d[0][0].value;
+        }
+        else if (metric == 1) {
             d[0][0].value = Math.pow(A[0] - B[0], 2);
-        else if (metric == 2)
+            d[0][0].formula = 'd[0,0] = dist(0,0) = ' + d[0][0].value;
+        }
+        else if (metric == 2) {
             d[0][0].value = Math.round(Math.abs(A[0] - B[0]) / (Math.abs(A[0]) + Math.abs(B[0])), 2);
-        else if (metric == 3)
+            d[0][0].formula = 'd[0,0] = dist(0,0) = ' + d[0][0].value;
+        }
+        else if (metric == 3) {
             d[0][0].value = Math.pow(Math.abs(A[0] - B[0]), 3);
+            d[0][0].formula = 'd[0,0] = dist(0,0) = ' + d[0][0].value;
+        }
         for (var j = 1; j < m; j++) {
-            if (metric == 0)
+            if (metric == 0) {
                 d[j][0].value = Math.abs(A[j] - B[0]) + d[j - 1][0].value;
-            else if (metric == 1)
+                d[j][0].formula = 'd['+j+',0] = dist('+j+',0)+d['+ (j-1) + ',0] = ' + Math.abs(A[j] - B[0]) + '+' + d[j - 1][0].value + ' = ' + d[j][0].value;
+            }
+            else if (metric == 1) {
                 d[j][0].value = Math.pow(A[j] - B[0], 2) + d[j - 1][0].value;
-            else if (metric == 2)
+                d[j][0].formula = 'd['+j+',0] = dist('+j+',0)+d['+ (j-1) + ',0] = ' +  Math.pow(A[j] - B[0], 2) + '+' + d[j - 1][0].value + ' = ' + d[j][0].value;
+            }
+            else if (metric == 2) {
                 d[j][0].value = Math.round(Math.abs(A[j] - B[0]) / (Math.abs(A[j]) + Math.abs(B[0])), 2) + d[j - 1][0].value;
-            else if (metric == 3)
+                d[j][0].formula = 'd['+j+',0] = dist('+j+',0)+d['+ (j-1) + ',0] = ' + Math.round(Math.abs(A[j] - B[0]) / (Math.abs(A[j]) + Math.abs(B[0])), 2) + '+' + d[j - 1][0].value + ' = ' + d[j][0].value;
+            }
+            else if (metric == 3) {
                 d[j][0].value = Math.pow(Math.abs(A[j] - B[0]), 3) + d[j - 1][0].value;
+                d[j][0].formula = 'd['+j+',0] = dist('+j+',0)+d['+ (j-1) + ',0] = ' + Math.pow(Math.abs(A[j] - B[0]), 3) + '+' + d[j - 1][0].value + ' = ' + d[j][0].value;
+            }
         }
         for (var k = 1; k < n; k++) {
-            if (metric == 0)
+            if (metric == 0) {
                 d[0][k].value = Math.abs(B[k] - A[0]) + d[0][k - 1].value;
-            else if (metric == 1)
+                d[0][k].formula = 'd[0,'+k+'] = dist(0,'+k+')+d[0,'+(k-1) + '] = '+Math.abs(B[k] - A[0]) + '+' + d[0][k - 1].value + ' = ' + d[0][k].value;
+            }
+            else if (metric == 1) {
                 d[0][k].value = Math.pow(B[k] - A[0], 2) + d[0][k - 1].value;
-            else if (metric == 2)
+                d[0][k].formula = 'd[0,'+k+'] = dist(0,'+k+')+d[0,'+(k-1) + '] = '+Math.pow(B[k] - A[0], 2)+ '+' + d[0][k - 1].value + ' = ' + d[0][k].value;
+            }
+            else if (metric == 2) {
                 d[0][k].value = Math.round(Math.abs(B[k] - A[0]) / (Math.abs(B[k]) + Math.abs(A[0])), 2) + d[0][k - 1].value;
-            else if (metric == 3)
+                d[0][k].formula = 'd[0,'+k+'] = dist(0,'+k+')+d[0,'+(k-1) + '] = ' + Math.round(Math.abs(B[k] - A[0]) / (Math.abs(B[k]) + Math.abs(A[0])), 2)+ '+' + d[0][k - 1].value + ' = ' + d[0][k].value;
+            }
+            else if (metric == 3) {
                 d[0][k].value = Math.pow(Math.abs(B[k] - A[0]), 3) + d[0][k - 1].value;
+                d[0][k].formula = 'd[0,'+k+'] = dist(0,'+k+')+d[0,'+(k-1) + '] = ' + Math.pow(Math.abs(B[k] - A[0]), 3)+ '+' + d[0][k - 1].value+ ' = ' + d[0][k].value;
+            }
         }
     }
     // must have m = n?
@@ -63,8 +87,10 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     if (window == 1) {
         for (var r = 0; r < m; r++) {
             for (var t = 0; t < n; t++) {
-                if (Math.abs(r - t) > parseInt(window_param))
+                if (Math.abs(r - t) > parseInt(window_param)) {
                     d[r][t].value = Infinity;
+                    d[r][t].formula = 'd[' + r + ',' + t + '] = ' + d[r][t].value;
+                }
             }
         }
     }
@@ -72,8 +98,10 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     else if (window == 2) {
         for (var r = 0; r < m; r++) {
             for (var t = 0; t < n; t++) {
-                if (!(itakura(r + 1, t + 1, m, n)))
+                if (!(itakura(r + 1, t + 1, m, n))) {
                     d[r][t].value = Infinity;
+                    d[r][t].formula = 'd[' + r + ',' + t + '] = ' + d[r][t].value;
+                }
             }
         }
     }
@@ -81,44 +109,73 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
     else if (window == 3) {
         // all values to Infinity
         for (var r = 0; r < m; r++) {
-            for (var t = 0; t < n; t++)
+            for (var t = 0; t < n; t++) {
                 d[r][t].value = Infinity;
+                d[r][t].formula = 'd[' + r + ',' + t + '] = ' + d[r][t].value;
+            }
         }
         var slant = n / m;
         for (var r = 0; r < m; r++) {
             var slant_r = Math.ceil(r * slant);
             for (var t = Math.max(slant_r - parseInt(window_param), 0); t < Math.min(n, slant_r + parseInt(window_param) + 1); t++) {
                 if (r == 0 && t == 0) {
-                    if (metric == 0)
+                    if (metric == 0) {
                         d[0][0].value = Math.abs(A[0] - B[0]);
-                    else if (metric == 1)
+                        d[0][0].formula = 'd[0,0] = dist(0,0) = ' + d[0][0].value;
+                    }
+                    else if (metric == 1) {
                         d[0][0].value = Math.pow(A[0] - B[0], 2);
-                    else if (metric == 2)
+                        d[0][0].formula = 'd[0,0] = dist(0,0) = ' + d[0][0].value;
+                    }
+                    else if (metric == 2) {
                         d[0][0].value = Math.round(Math.abs(A[0] - B[0]) / (Math.abs(A[0]) + Math.abs(B[0])), 2);
-                    else if (metric == 3)
+                        d[0][0].formula = 'd[0,0] = dist(0,0) = ' + d[0][0].value;
+                    }
+                    else if (metric == 3) {
                         d[0][0].value = Math.pow(Math.abs(A[0] - B[0]), 3);
+                        d[0][0].formula = 'd[0,0] = dist(0,0) = ' + d[0][0].value;
+                    }
                 }
                 else if (r == 0) {
                     //console.log(r,t)
-                    if (metric == 0)
+                    if (metric == 0) {
                         d[0][t].value = Math.abs(A[0] - B[t]) + d[0][t - 1].value;
-                    else if (metric == 1)
+                        d[0][t].formula = 'd[0,'+t+'] = dist(0,'+t+')+d[0,'+(t-1)+'] = ' + Math.abs(B[k] - A[0]) + '+' + d[0][t - 1].value + ' = ' + d[0][t].value;
+                    }
+                    else if (metric == 1) {
                         d[0][t].value = Math.pow(A[0] - B[t], 2) + d[0][t - 1].value;
-                    else if (metric == 2)
+                        d[0][t].formula = 'd[0,'+t+'] = dist(0,'+t+')+d[0,'+(t-1)+'] = ' + Math.pow(A[0] - B[t], 2) + '+' + d[0][t - 1].value + ' = ' + d[0][t].value;
+                    }
+                    else if (metric == 2) {
                         d[0][t].value = Math.round(Math.abs(A[0] - B[t]) / (Math.abs(A[0]) + Math.abs(B[t])), 2) + d[0][t - 1].value;
-                    else if (metric == 3)
+                        d[0][t].formula = 'd[0,'+t+'] = dist(0,'+t+')+d[0,'+(t-1)+'] = ' + Math.round(Math.abs(A[0] - B[t]) / (Math.abs(A[0]) + Math.abs(B[t])), 2) + '+' + d[0][t - 1].value + ' = ' + d[0][t].value;
+                    }
+                    else if (metric == 3) {
                         d[0][t].value = Math.pow(Math.abs(A[0] - B[t]), 3) + d[0][t - 1].value;
+                        d[0][t].formula = 'd[0,'+t+'] = dist(0,'+t+')+d[0,'+(t-1)+'] = ' + Math.pow(Math.abs(A[0] - B[t]), 3) + '+' + d[0][t - 1].value + ' = ' + d[0][t].value;
+                    }
                 }
                 else if (t == 0) {
-                    console.log(r, t)
-                    if (metric == 0)
+                    if (metric == 0) {
                         d[r][0].value = Math.abs(A[r] - B[0]) + d[r - 1][0].value;
-                    else if (metric == 1)
+                        d[r][0].formula = 'd['+ r +',0] = dist('+r+',0)+d['+ (r-1) + ',0] = ' + Math.abs(A[r] - B[0]) + '+' + d[r - 1][0].value + ' = ' + d[r][0].value;
+
+                    }
+                    else if (metric == 1) {
                         d[r][0].value = Math.pow(A[r] - B[0], 2) + d[r - 1][0].value;
-                    else if (metric == 2)
+                        d[r][0].formula = 'd['+ r +',0] = dist('+r+',0)+d['+ (r-1) + ',0] = ' + Math.pow(A[r] - B[0], 2) + '+' + d[r - 1][0].value + ' = ' + d[r][0].value;
+
+                    }
+                    else if (metric == 2) {
                         d[r][0].value = Math.round(Math.abs(A[r] - B[0]) / (Math.abs(A[r]) + Math.abs(B[0])), 2) + d[r - 1][0].value;
-                    else if (metric == 3)
+                        d[r][0].formula = 'd['+ r +',0] = dist('+r+',0)+d['+ (r-1) + ',0] = ' + Math.round(Math.abs(A[r] - B[0]) / (Math.abs(A[r]) + Math.abs(B[0])), 2) + '+' + d[r - 1][0].value + ' = ' + d[r][0].value;
+
+                    }
+                    else if (metric == 3) {
                         d[r][0].value = Math.pow(Math.abs(A[r] - B[0]), 3) + d[r - 1][0].value;
+                        d[r][0].formula = 'd['+ r +',0] = dist('+r+',0)+d['+ (r-1) + ',0] = ' + Math.pow(Math.abs(A[r] - B[0]), 3) + '+' + d[r - 1][0].value + ' = ' + d[r][0].value;
+
+                    }
                 }
             }
         }
@@ -138,6 +195,8 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                     dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                 // min(diagonal, up, left)
                 d[l][p].value = dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
+                d[l][p].formula = 'd[' + l + ',' + p + '] = dist(' + l + ',' + p + ')+min{d[' + (l - 1) + ',' + (p - 1) + '], d[' + (l - 1) + ',' + p + '], d[' + l + ',' + (p - 1) + ']} = ';
+                d[l][p].formula = d[l][p].formula + dist + '+' + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value) + ' = ' + d[l][p].value;
             }
         }
     }
@@ -154,6 +213,8 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                     dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                 // min(diagonal, up, left)
                 d[l][p].value = dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
+                d[l][p].formula = 'd[' + l + ',' + p + '] = dist(' + l + ',' + p + ')+min{d[' + (l - 1) + ',' + (p - 1) + '], d[' + (l - 1) + ',' + p + '], d[' + l + ',' + (p - 1) + ']} = ';
+                d[l][p].formula = d[l][p].formula + dist + '+' + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value) + ' = ' + d[l][p].value;
             }
         }
     }
@@ -170,6 +231,8 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                     else if (metric == 3)
                         dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                     d[l][p].value = dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
+                    d[l][p].formula = 'd[' + l + ',' + p + '] = dist(' + l + ',' + p + ')+min{d[' + (l - 1) + ',' + (p - 1) + '], d[' + (l - 1) + ',' + p + '], d[' + l + ',' + (p - 1) + ']} = ';
+                    d[l][p].formula = d[l][p].formula + dist + '+' + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value) + ' = ' + d[l][p].value;
                 }
             }
         }
@@ -188,6 +251,8 @@ dynamicTimeWarping = function (A, B, metric, window, window_param) {
                 else if (metric == 3)
                     dist = Math.pow(Math.abs(A[l] - B[p]), 3);
                 d[l][p].value = dist + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value);
+                d[l][p].formula = 'd[' + l + ',' + p + '] = dist(' + l + ',' + p + ')+min{d[' + (l - 1) + ',' + (p - 1) + '], d[' + (l - 1) + ',' + p + '], d[' + l + ',' + (p - 1) + ']} = ';
+                d[l][p].formula = d[l][p].formula + dist + '+' + Math.min(d[l - 1][p - 1].value, d[l - 1][p].value, d[l][p - 1].value) + ' = ' + d[l][p].value;
 
             }
         }
