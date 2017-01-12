@@ -10,6 +10,7 @@
 // 2 - Itakura parallelogram
 // 3 - Slanted band (similar to Sakoe Chiba for  m!=n)
 // window_param - parameter size for Sakoe Chiba
+// in band calculation used code snippets from https://github.com/fbkarsdorp/dynamic-time-warping
 
 dynamicTimeWarping = function (A, B, metric, window, window_param) {
     var m = A.length; //rows
