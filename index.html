@@ -309,8 +309,15 @@
                     The algorithm for calculating DTW distance between given two sequences A and B is presented as
                     Algorithm 1.
                     <br><br>
+                    <center>
                     <img src="dtw.png" style="display: block;
                     width = " 300"; height = "200";margin: 0 auto;">
+                     </center>
+                     An example of the cost matrix, warping path and alignment is as follows:
+                    <center>
+                    <img src="about/noconstraints.png" style="display: block;
+                    width = " 300"; height = "200";margin: 0 auto;">
+                    </center>
                 </section>
                 <section style="text-align: justify;">
                     <h3>Global Constraints</h3>
@@ -328,18 +335,22 @@
                     <h4>Sakoe-Chiba Band</h4>
                     Sakoe-Chiba band was introduced by Sakoe and Chiba in [SC78] for speech community.
                     It runs by the main diagonal having fixed window width.
-                    <img src="dtw.png" style="display: block;
-                    width = " 300"; height = "200";margin: 0 auto;">
+                    <center><img src="about/sakoe_chiba.png" align="middle" style="display: block;
+                    width = " 300"; height = "200" ; margin: 0 auto;"></center>
                     <h4>Itakura Parallelogram</h4>
                     Itakura parallelogram was introduced by Itakura in [Ita75].
                     The warping window constrains the slope of a
                     warping path, i.e., the Itakura parallelogram
                     consists of all cells that are traversed by some warping path having a slope.
+                     <center><img src="about/itakura.png" style="display: block;
+                    width = " 300"; height = "200";margin: 0 auto;"></center>
                     <br><br>
                     <h4>Slanted Band</h4>
                     Slanted band is a modification of
                     Sakoe-Chiba band for the case where input sequences are of different length.
                     Instead of main diagonal here slanted diagonal is used.
+                    <center><img src="about/slanted.png" style="display: block;
+                    width = " 300"; height = "200";margin: 0 auto;"></center>
                 </section>
                 <section style="text-align: justify;">
                     <h3>Applications</h3>
