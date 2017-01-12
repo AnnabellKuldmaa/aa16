@@ -13,8 +13,12 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.6.0/css/bootstrap-slider.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script type="text/javascript"
-            src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+
+    <script type="text/javascript" async
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_CHTML">
+    </script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
     </script>
 
     <title>Dynamic Time Warping</title>
@@ -70,7 +74,6 @@
         div.tooltip2 {
             position: absolute;
             text-align: center;
-            width: 60px;
             padding: 2px;
             font: 12px sans-serif;
             background: lightsteelblue;
@@ -148,7 +151,7 @@
             <ul class="nav navbar-nav" id="myNavbar">
                 <li class="active"><a href="#home" role="tab">Home</a></li>
                 <li><a href="#about" role="tab">About</a></li>
-                <li><a href="#contact" role="tab">Contact</a></li>
+                <li><a href="poster.pdf" role="tab" id="poster">Poster</a></li>
             </ul>
         </div>
     </div>
@@ -205,7 +208,12 @@
                         </div>
 
                         <div class="form-group form-group-sm row text-left">
-                            <label class="col-sm-3">Window parameter:</label>
+                            <div class="col-sm-3">
+                                <label>Window parameter:</label>
+
+                                <p class="text-muted" style="font-size:10px;">The distance that the path is allowed to
+                                    wander<br>(% of sequence length)</p>
+                            </div>
 
                             <div class="col-sm-5">
                                 <span style="position:absolute; color:grey;">
@@ -392,7 +400,7 @@
 
         </div>
 
-        <div class="tab-pane fade" id="contact" role="tabpanel">...</div>
+        <div class="tab-pane fade" id="poster" role="tabpanel"><a href="poster.pdf">Poster</a></div>
 
     </div>
 </div>
@@ -410,8 +418,6 @@
 <script src="https://d3js.org/d3-color.v1.min.js"></script>
 <script src="https://d3js.org/d3-format.v1.min.js"></script>
 <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
-<script src="https://d3js.org/d3-time.v1.min.js"></script>
-<script src="https://d3js.org/d3-time-format.v2.min.js"></script>
 <script src="https://d3js.org/d3-scale.v1.min.js"></script>
 <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
 <script type="text/javascript" src="warping-vis.js"></script>
@@ -467,8 +473,11 @@
 
 <script type="text/javascript">
     $('#myNavbar a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show')
+        if ($(this).attr('id') != "poster") {
+            e.preventDefault();
+            $(this).tab('show')
+        }
+
     })
 </script>
 <script type="text/javascript">
